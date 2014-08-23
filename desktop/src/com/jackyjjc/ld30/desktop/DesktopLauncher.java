@@ -2,7 +2,7 @@ package com.jackyjjc.ld30.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.jackyjjc.ld30.LDGame;
+import com.jackyjjc.ld30.view.LDGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
