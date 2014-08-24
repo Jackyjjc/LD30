@@ -33,6 +33,19 @@ public class GameState {
         notifyListeners();
     }
 
+    public void deleteRoute(Route r) {
+        curPlayer().routes.remove(r);
+    }
+
+    public void editRoute(Route r, int shipId, int newAmount) {
+        curPlayer().spaceShips[r.ship.id] += r.numShips;
+
+        r.ship = DataSource.get().spaceShips[shipId];
+        r.numShips = newAmount;
+
+        curPlayer().spaceShips[shipId] -= newAmount;
+    }
+
     public void setShipAmount(int shipId, int newAmount) {
         int currentAmount = curPlayer().spaceShips[shipId];
         int delta = newAmount - currentAmount;
@@ -70,7 +83,23 @@ public class GameState {
         return true;
     }
 
-    public boolean isLegalRoute(Planet from, Planet to, float numShips) {
+    public boolean isLegalEditRoute(Route r, int shipId, int numShips) {
+
+        if(DataSource.get().spaceShips[shipId].maxDistance < r.from.distance[r.to.id]) {
+            errno = GameStrings.ERR_SHIP_NOT_SUIT;
+            return false;
+        }
+
+        //check if there are ships;
+        if(numShips <= 0) {
+            errno = GameStrings.ERR_NO_SHIP;
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isLegalAddRoute(Planet from, Planet to, int shipId, float numShips) {
         //check if route already exists
         for(Route r : curPlayer().routes) {
             if ((r.from.equals(from) || r.from.equals(to))
@@ -78,6 +107,11 @@ public class GameState {
                 errno = GameStrings.ERR_ROUTE_EXIST;
                 return false;
             }
+        }
+
+        if(DataSource.get().spaceShips[shipId].maxDistance < from.distance[to.id]) {
+            errno = GameStrings.ERR_SHIP_NOT_SUIT;
+            return false;
         }
 
         //check if there are ships;

@@ -34,6 +34,7 @@ public class GameScreen implements Screen {
     private GameScreenController controller;
     private SpaceShipSim spaceShipSim;
 
+    private Texture actionPanel;
     private Texture background;
     private ImageButton[] planetButtons;
 
@@ -47,7 +48,8 @@ public class GameScreen implements Screen {
         this.model = new GameState();
         this.controller = new GameScreenController(model, stage, spaceShipSim);
 
-        background = new Texture(Gdx.files.internal("sprites/background.jpg"));
+        this.background = new Texture(Gdx.files.internal("sprites/background.jpg"));
+        this.actionPanel = Resources.get("actionPanel", Texture.class);
 
         //create the planets
         createPlanets();
@@ -74,6 +76,7 @@ public class GameScreen implements Screen {
 
         batch.begin();
             batch.draw(background, 0, 150);
+            batch.draw(actionPanel, 600, 0);
         batch.end();
 
         //draw all the routes

@@ -1,4 +1,4 @@
-package com.jackyjjc.ld30.model;
+package com.jackyjjc.ld30.controller;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,6 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.jackyjjc.ld30.model.DataSource;
+import com.jackyjjc.ld30.model.GameState;
+import com.jackyjjc.ld30.model.GameStrings;
+import com.jackyjjc.ld30.model.SpaceShip;
 import com.jackyjjc.ld30.view.Resources;
 
 /**

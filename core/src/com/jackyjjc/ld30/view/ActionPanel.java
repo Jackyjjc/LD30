@@ -6,10 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.jackyjjc.ld30.controller.EditRouteDialog;
 import com.jackyjjc.ld30.controller.GameScreenController;
 import com.jackyjjc.ld30.model.GameState;
 import com.jackyjjc.ld30.model.GameUpdateListener;
-import com.jackyjjc.ld30.model.ShipMgmtDialog;
+import com.jackyjjc.ld30.controller.ShipMgmtDialog;
 
 /**
  * @author Jackyjjc (jacky.jjchen@gmail.com)
@@ -20,19 +21,25 @@ public class ActionPanel implements GameUpdateListener {
     private Label moneyLabel;
 
     public ActionPanel(final GameState model, final GameScreenController controller, final Stage stage) {
-
         //creating rhs panel
         table = new Table();
+        table.top();
         table.setSize(200, 600);
         table.setPosition(600, 0);
         //table.setDebug(true);
 
-        Label l = new Label("Coperation: \n      " + model.curPlayer().name, Resources.getSkin());
-        table.add(l);
+        Label l = new Label(model.curPlayer().name, Resources.getSkin());
+        table.add(l).top().left().width(200).height(100).colspan(2);
         table.row();
 
-        moneyLabel = new Label("Money: " + model.curPlayer().money, Resources.getSkin());
+        l = new Label("Money: ", Resources.getSkin());
+        table.add(l);
+        moneyLabel = new Label(model.curPlayer().money + "", Resources.getSkin());
         table.add(moneyLabel);
+        table.row();
+
+        l = new Label("Actions: ", Resources.getSkin());
+        table.add(l).colspan(2).left().padTop(20);
         table.row();
 
         final TextButton buildRouteBtn = new TextButton("Build Route", Resources.getSkin());
@@ -47,7 +54,19 @@ public class ActionPanel implements GameUpdateListener {
             }
         });
         controller.buildRouteBtn = buildRouteBtn;
-        table.add(buildRouteBtn);
+        table.add(buildRouteBtn).colspan(2).center().width(100).padTop(15);
+        table.row();
+
+        TextButton editRouteBtn = new TextButton("Edit Route", Resources.getSkin());
+        editRouteBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                EditRouteDialog dialog = new EditRouteDialog(model);
+                dialog.show(stage);
+            }
+        });
+        table.add(editRouteBtn).colspan(2).center().width(100).padTop(15);
         table.row();
 
         TextButton shipBtn = new TextButton("Spaceships", Resources.getSkin());
@@ -59,7 +78,7 @@ public class ActionPanel implements GameUpdateListener {
                 dialog.show(stage);
             }
         });
-        table.add(shipBtn);
+        table.add(shipBtn).colspan(2).center().padTop(15).width(100);
         table.row();
 
         TextButton endTurnBtn = new TextButton("End Turn", Resources.getSkin());
@@ -70,7 +89,7 @@ public class ActionPanel implements GameUpdateListener {
                 model.endTurn();
             }
         });
-        table.add(endTurnBtn);
+        table.add(endTurnBtn).colspan(2).center().padTop(15).width(100);
 
         model.addListener(this);
     }

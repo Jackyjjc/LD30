@@ -24,6 +24,8 @@ public class NewRouteDialog {
     private final Planet to;
 
     private Label errLabel;
+    private SelectBox<String> spaceShipSB;
+    private HashMap<String, Integer> nameIdMap;
     private Slider shipNumSlider;
     private TextButton confirmBtn;
 
@@ -77,7 +79,7 @@ public class NewRouteDialog {
         t.add(l).colspan(3);
         t.row();
 
-        final HashMap<String, Integer> nameIdMap = new HashMap<>();
+        nameIdMap = new HashMap<>();
         Array<String> shipNames = new Array<>();
         for(SpaceShip ship : DataSource.get().spaceShips) {
             if (g.curPlayer().spaceShips[ship.id] > 0) {
@@ -94,7 +96,7 @@ public class NewRouteDialog {
             shipNumSlider.setRange(0, g.curPlayer().spaceShips[nameIdMap.get(shipNames.first())]);
         }
 
-        final SelectBox<String> spaceShipSB = new SelectBox<>(Resources.getSkin());
+        spaceShipSB = new SelectBox<>(Resources.getSkin());
         spaceShipSB.setItems(shipNames);
         spaceShipSB.addListener(new ChangeListener() {
             @Override
@@ -169,7 +171,7 @@ public class NewRouteDialog {
     }
 
     private void legalCheck() {
-        if(!g.isLegalRoute(from, to, shipNumSlider.getValue())) {
+        if(!g.isLegalAddRoute(from, to, nameIdMap.get(spaceShipSB.getSelected()), shipNumSlider.getValue())) {
             errLabel.setVisible(true);
             errLabel.setText(GameStrings.values[g.errno]);
             confirmBtn.setDisabled(true);

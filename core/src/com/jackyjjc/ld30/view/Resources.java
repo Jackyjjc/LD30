@@ -61,5 +61,6 @@ public class Resources {
         }
 
         this.map.put("ship", new Texture("sprites/ship.png"));
+        this.map.put("actionPanel", new Texture("sprites/actionPanel.png"));
     }
 }
