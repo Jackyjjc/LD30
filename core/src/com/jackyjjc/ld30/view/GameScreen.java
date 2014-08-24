@@ -31,11 +31,11 @@ public class GameScreen implements Screen {
 
     public GameScreen() {
         this.shapeRenderer = new ShapeRenderer();
-        this.model = new GameState();
-        this.controller = new GameScreenController(model);
-
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
+
+        this.model = new GameState();
+        this.controller = new GameScreenController(model, stage);
 
         Image image = new Image(new Texture(Gdx.files.internal("sprites/background.jpg")));
         image.setPosition(0, 150);
@@ -54,40 +54,8 @@ public class GameScreen implements Screen {
         stage.addActor(sp);
         controller.planetDetail = sp;
 
-        //creating rhs panel
-        Table table = new Table();
-        table.setSize(200, 600);
-        table.setPosition(600, 0);
-        //table.setDebug(true);
-
-        Label l = new Label("Coperation: \n      " + model.curPlayer().name, Resources.getSkin());
-        table.add(l);
-        table.row();
-
-        l = new Label("Money: " + model.curPlayer().money, Resources.getSkin());
-        table.add(l);
-        table.row();
-
-        final TextButton buildRouteBtn = new TextButton("Build Route", Resources.getSkin());
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(buildRouteBtn.getStyle());
-        style.checked = style.down;
-        buildRouteBtn.setStyle(style);
-        buildRouteBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.inBuildMode = !controller.inBuildMode;
-                buildRouteBtn.setChecked(controller.inBuildMode);
-            }
-        });
-        controller.buildRouteBtn = buildRouteBtn;
-        table.add(buildRouteBtn);
-
-        table.row();
-
-        TextButton endTurnBtn = new TextButton("End Turn", Resources.getSkin());
-        table.add(endTurnBtn);
-
-        stage.addActor(table);
+        ActionPanel rhsPanel = new ActionPanel(model, controller);
+        stage.addActor(rhsPanel.getRootTable());
     }
 
     @Override
@@ -156,7 +124,7 @@ public class GameScreen implements Screen {
                 {518, 184, 79},
                 {350, 237, 44},
                 {470, 322, 52},
-                {514, 506, 24},
+                {524, 516, 24},
                 {274, 226, 40},
                 {453, 440, 83},
                 {224, 389, 36},

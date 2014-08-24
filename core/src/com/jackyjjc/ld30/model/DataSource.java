@@ -18,6 +18,7 @@ public class DataSource {
 
     public Race[] races;
     public Planet[] planets;
+    public SpaceShip[] spaceShips;
 
     public static Planet getPlanet(String id) {
         return get().planets[Integer.parseInt(id)];

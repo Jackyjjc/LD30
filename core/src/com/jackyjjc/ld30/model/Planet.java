@@ -12,6 +12,7 @@ public class Planet {
     public int travel;
     public int strategic;
     public int business;
+    public int[] distance;
 
     @Override
     public boolean equals(Object o) {

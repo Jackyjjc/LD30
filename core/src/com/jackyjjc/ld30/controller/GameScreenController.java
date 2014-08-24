@@ -1,5 +1,6 @@
 package com.jackyjjc.ld30.controller;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -13,43 +14,46 @@ import com.jackyjjc.ld30.model.Planet;
  */
 public class GameScreenController {
 
+    private Stage stage;
     private GameState g;
     private ImageButton selectedPlanet;
     public ScrollPane planetDetail;
 
-    public GameScreenController(GameState g) {
+    public GameScreenController(GameState g, Stage stage) {
         this.g = g;
+        this.stage = stage;
     }
 
     public void selectPlanet(ImageButton planet) {
         if (!inBuildMode || selectedPlanet == null) {
             handleNormalSelect(planet);
             return;
+        } else {
+            handleBuildSelect(planet);
         }
+    }
 
-        if (planet == null) {
+    public boolean inBuildMode;
+    public TextButton buildRouteBtn;
+
+    public void handleBuildSelect(ImageButton planet) {
+        if (planet == null || selectedPlanet == planet) {
+            deselectButton();
+            exitBuildMode();
             return;
         }
 
         Planet from = DataSource.getPlanet(selectedPlanet.getName());
         Planet to = DataSource.getPlanet(planet.getName());
 
-        if(g.isLegalRoute(from, to)) {
-            g.addRoute(from, to);
-        }
+        NewRouteDialog dialog = new NewRouteDialog(g, from, to);
+        dialog.show(stage);
 
         deselectButton();
         planet.setChecked(false);
         planetDetail.setVisible(false);
-        buildRouteBtn.setChecked(false);
-        inBuildMode = false;
-
-        //Label l = (Label)planetDetail.getWidget();
-        //l.setText("Construct a routes between " + DataSource.get().planets[Integer.parseInt(selectedPlanet.getName())].name + " and " + DataSource.get().planets[Integer.parseInt(planet.getName())].name + "?");
+        exitBuildMode();
     }
-
-    public boolean inBuildMode;
-    public TextButton buildRouteBtn;
 
     public void handleNormalSelect(ImageButton planet) {
         if(selectedPlanet != null) {
@@ -75,9 +79,16 @@ public class GameScreenController {
         }
     }
 
+
+
     private void deselectButton() {
         this.selectedPlanet.setChecked(false);
         this.selectedPlanet = null;
+    }
+
+    private void exitBuildMode() {
+        buildRouteBtn.setChecked(false);
+        inBuildMode = false;
     }
 
     public void build(Planet from, Planet to) {

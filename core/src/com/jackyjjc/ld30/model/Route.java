@@ -6,10 +6,22 @@ package com.jackyjjc.ld30.model;
 public class Route {
     public Planet from;
     public Planet to;
+    public SpaceShip ship;
+    public int numShips;
 
-    public Route(Planet from, Planet to) {
+    public static int getSetupCost(Planet from, Planet to) {
+        return from.distance[to.id] * 100;
+    }
+
+    public Route(Planet from, Planet to, int shipId, int numShips) {
         this.from = from;
         this.to = to;
+        this.ship = DataSource.get().spaceShips[shipId];
+        this.numShips = numShips;
+    }
+
+    public int getMaintenance() {
+        return ship.maintenance * numShips;
     }
 
     public int genMoney() {
