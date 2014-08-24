@@ -24,13 +24,15 @@ public class GameState {
         };
     }
 
-    public void addRoute(Planet from, Planet to, int shipId, int numShips) {
+    public Route addRoute(Planet from, Planet to, int shipId, int numShips) {
         Route newRoute = new Route(from, to, shipId, numShips);
         curPlayer().routes.add(newRoute);
         curPlayer().money -= Route.getSetupCost(from, to);
 
         curPlayer().spaceShips[shipId] -= numShips;
         notifyListeners();
+
+        return newRoute;
     }
 
     public void deleteRoute(Route r) {
@@ -84,7 +86,6 @@ public class GameState {
     }
 
     public boolean isLegalEditRoute(Route r, int shipId, int numShips) {
-
         if(DataSource.get().spaceShips[shipId].maxDistance < r.from.distance[r.to.id]) {
             errno = GameStrings.ERR_SHIP_NOT_SUIT;
             return false;

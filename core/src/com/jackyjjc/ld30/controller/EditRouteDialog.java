@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.jackyjjc.ld30.model.*;
 import com.jackyjjc.ld30.view.Resources;
+import com.jackyjjc.ld30.view.SpaceShipSim;
 
 import java.util.List;
 
@@ -25,14 +26,19 @@ public class EditRouteDialog {
     private SelectBox<String> routeSelBox;
     private Slider shipNumSlider;
     private TextButton confirmBtn;
+    private TextButton deleteBtn;
 
     private Dialog dialog;
 
-    public EditRouteDialog(final GameState g) {
+    public EditRouteDialog(final GameState g, final SpaceShipSim sim) {
         this.g = g;
         this.dialog = new Dialog("Edit Route", Resources.getSkin());
 
         Table t = dialog.getContentTable();
+
+        Label l = new Label("Routes: ", Resources.getSkin());
+        t.add(l).colspan(2).left();
+        t.row();
 
         final List<Route> routes = g.curPlayer().routes;
         Array<String> routeNames = new Array<>();
@@ -61,13 +67,13 @@ public class EditRouteDialog {
         spaceShipSB.setItems(shipNames);
 
         shipNumSlider = new Slider(0, 0, 1, false, Resources.getSkin());
-        if(shipNames.size > 0) {
+        if(routes.size() > 0) {
             shipNumSlider.setRange(0, g.curPlayer().spaceShips[curRoute.ship.id] + curRoute.numShips);
         }
 
         final Label numShipLabel = new Label("0", Resources.getSkin());
         final Label mLabel = new Label("0", Resources.getSkin());
-        if(shipNames.size > 0) {
+        if(routes.size() > 0) {
             mLabel.setText(curRoute.getMaintenance() + "");
         }
 
@@ -98,8 +104,8 @@ public class EditRouteDialog {
             }
         });
 
-        Label l = new Label("Ship: ", Resources.getSkin());
-        t.add(l);
+        l = new Label("Ship: ", Resources.getSkin());
+        t.add(l).left();
         t.row();
         t.add(spaceShipSB);
         t.add(shipNumSlider).width(100).left();
@@ -117,12 +123,16 @@ public class EditRouteDialog {
         t.add(errLabel).colspan(4).center();
         t.row();
 
-        TextButton deleteBtn = new TextButton("Delete", Resources.getSkin());
+        deleteBtn = new TextButton("Delete", Resources.getSkin());
         deleteBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                if(curRoute == null) {
+                    return;
+                }
                 g.deleteRoute(curRoute);
+                sim.deleteRoute(curRoute);
             }
         });
 
@@ -131,7 +141,12 @@ public class EditRouteDialog {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                g.editRoute(curRoute, spaceShipSB.getSelectedIndex(), (int) shipNumSlider.getValue());
+                if(curRoute == null) {
+                    return;
+                }
+                int newAmount = (int) shipNumSlider.getValue();
+                g.editRoute(curRoute, spaceShipSB.getSelectedIndex(), newAmount);
+                sim.editRoute(curRoute, newAmount);
             }
         });
 
@@ -148,6 +163,11 @@ public class EditRouteDialog {
     }
 
     private void legalCheck() {
+        if(curRoute == null) {
+            confirmBtn.setDisabled(true);
+            deleteBtn.setDisabled(true);
+            return;
+        }
         if(!g.isLegalEditRoute(curRoute, routeSelBox.getSelectedIndex(), (int) shipNumSlider.getValue())) {
             errLabel.setVisible(true);
             errLabel.setText(GameStrings.values[g.errno]);

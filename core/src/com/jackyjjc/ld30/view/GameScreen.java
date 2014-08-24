@@ -41,18 +41,18 @@ public class GameScreen implements Screen {
     public GameScreen() {
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
-        this.spaceShipSim = new SpaceShipSim();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        this.model = new GameState();
-        this.controller = new GameScreenController(model, stage, spaceShipSim);
 
         this.background = new Texture(Gdx.files.internal("sprites/background.jpg"));
         this.actionPanel = Resources.get("actionPanel", Texture.class);
 
         //create the planets
         createPlanets();
+        this.model = new GameState();
+        this.spaceShipSim = new SpaceShipSim(planetButtons);
+        this.controller = new GameScreenController(model, stage, spaceShipSim);
 
         //create planet detail panel
         Label planetDetail = new Label("", Resources.getSkin());
@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
         stage.addActor(sp);
         controller.planetDetail = sp;
 
-        ActionPanel rhsPanel = new ActionPanel(model, controller, stage);
+        ActionPanel rhsPanel = new ActionPanel(model, controller, spaceShipSim, stage);
         stage.addActor(rhsPanel.getRootTable());
     }
 

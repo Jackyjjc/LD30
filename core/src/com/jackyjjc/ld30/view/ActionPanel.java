@@ -20,7 +20,7 @@ public class ActionPanel implements GameUpdateListener {
     private Table table;
     private Label moneyLabel;
 
-    public ActionPanel(final GameState model, final GameScreenController controller, final Stage stage) {
+    public ActionPanel(final GameState model, final GameScreenController controller, final SpaceShipSim sim, final Stage stage) {
         //creating rhs panel
         table = new Table();
         table.top();
@@ -29,7 +29,7 @@ public class ActionPanel implements GameUpdateListener {
         //table.setDebug(true);
 
         Label l = new Label(model.curPlayer().name, Resources.getSkin());
-        table.add(l).top().left().width(200).height(100).colspan(2);
+        table.add(l).top().left().width(200).height(50).colspan(2).padLeft(15);
         table.row();
 
         l = new Label("Money: ", Resources.getSkin());
@@ -39,7 +39,7 @@ public class ActionPanel implements GameUpdateListener {
         table.row();
 
         l = new Label("Actions: ", Resources.getSkin());
-        table.add(l).colspan(2).left().padTop(20);
+        table.add(l).colspan(2).left().padTop(10).padLeft(15);
         table.row();
 
         final TextButton buildRouteBtn = new TextButton("Build Route", Resources.getSkin());
@@ -62,7 +62,7 @@ public class ActionPanel implements GameUpdateListener {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                EditRouteDialog dialog = new EditRouteDialog(model);
+                EditRouteDialog dialog = new EditRouteDialog(model, sim);
                 dialog.show(stage);
             }
         });

@@ -154,8 +154,8 @@ public class NewRouteDialog {
                 super.clicked(event, x, y);
                 if(!confirmBtn.isDisabled()) {
                     int size = (int) shipNumSlider.getValue();
-                    g.addRoute(from, to, spaceShipSB.getSelectedIndex(), size);
-                    sim.addRoute(selectedPlanet, planet, size);
+                    Route r = g.addRoute(from, to, spaceShipSB.getSelectedIndex(), size);
+                    sim.addRoute(r, selectedPlanet, planet, size);
                 }
             }
         });
