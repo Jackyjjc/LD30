@@ -49,13 +49,6 @@ public class EditRouteDialog {
 
         final SelectBox<String> routeSelBox = new SelectBox<>(Resources.getSkin());
         routeSelBox.setItems(routeNames);
-        routeSelBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                curRoute = routes.get(routeSelBox.getSelectedIndex());
-                legalCheck();
-            }
-        });
         t.add(routeSelBox);
         t.row();
 
@@ -114,6 +107,16 @@ public class EditRouteDialog {
                     }
                     shipNumSlider.setRange(0, g.curPlayer().spaceShips[spaceShipSB.getSelectedIndex()]);
                 }
+                legalCheck();
+            }
+        });
+
+        routeSelBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                curRoute = routes.get(routeSelBox.getSelectedIndex());
+                spaceShipSB.setSelectedIndex(curRoute.ship.id);
+                shipNumSlider.setValue(curRoute.numShips);
                 legalCheck();
             }
         });
