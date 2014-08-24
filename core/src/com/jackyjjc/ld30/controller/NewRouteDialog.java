@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.jackyjjc.ld30.model.*;
 import com.jackyjjc.ld30.view.Resources;
+import com.jackyjjc.ld30.view.SpaceShipSim;
 
 import java.util.HashMap;
 
@@ -28,10 +29,10 @@ public class NewRouteDialog {
 
     private Dialog dialog;
 
-    public NewRouteDialog(final GameState g, final Planet from, final Planet to) {
+    public NewRouteDialog(final GameState g, final SpaceShipSim sim, final ImageButton selectedPlanet, final ImageButton planet) {
         this.g = g;
-        this.from = from;
-        this.to = to;
+        this.from = DataSource.getPlanet(selectedPlanet.getName());
+        this.to = DataSource.getPlanet(planet.getName());
 
         this.dialog = new Dialog("New Route", Resources.getSkin());
         Table t = dialog.getContentTable();
@@ -150,7 +151,9 @@ public class NewRouteDialog {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 if(!confirmBtn.isDisabled()) {
-                    g.addRoute(from, to, spaceShipSB.getSelectedIndex(), (int) shipNumSlider.getValue());
+                    int size = (int) shipNumSlider.getValue();
+                    g.addRoute(from, to, spaceShipSB.getSelectedIndex(), size);
+                    sim.addRoute(selectedPlanet, planet, size);
                 }
             }
         });

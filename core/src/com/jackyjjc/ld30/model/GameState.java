@@ -105,7 +105,7 @@ public class GameState {
         for(Player p : players) {
             for(Route r : p.routes) {
                 //get profit and pay maintenance
-                //p.money += r.genMoney();
+                p.money += r.genMoney();
                 p.money -= r.getMaintenance();
             }
         }

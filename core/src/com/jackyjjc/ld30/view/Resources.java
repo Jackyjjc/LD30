@@ -29,7 +29,13 @@ public class Resources {
         if (!get().map.containsKey(key)) {
             return null;
         }
-        return (T)get().map.get(key);
+
+        Object o = get().map.get(key);
+        if(!o.getClass().equals(t)) {
+            return null;
+        }
+
+        return (T)o;
     }
 
     private HashMap<String, Object> map;
@@ -54,6 +60,6 @@ public class Resources {
                     new Sprite(new Texture(Gdx.files.internal("sprites/Planet_" + i + "_c.png")))));
         }
 
-        this.map.put("ship", new Sprite(new Texture("sprites/ship.png")));
+        this.map.put("ship", new Texture("sprites/ship.png"));
     }
 }

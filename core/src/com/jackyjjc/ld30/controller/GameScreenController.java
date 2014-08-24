@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.jackyjjc.ld30.model.DataSource;
 import com.jackyjjc.ld30.model.GameState;
 import com.jackyjjc.ld30.model.Planet;
+import com.jackyjjc.ld30.view.SpaceShipSim;
 
 /**
  * @author Jackyjjc (jacky.jjchen@gmail.com)
@@ -16,12 +17,14 @@ public class GameScreenController {
 
     private Stage stage;
     private GameState g;
+    private SpaceShipSim sim;
     private ImageButton selectedPlanet;
     public ScrollPane planetDetail;
 
-    public GameScreenController(GameState g, Stage stage) {
+    public GameScreenController(GameState g, Stage stage, SpaceShipSim sim) {
         this.g = g;
         this.stage = stage;
+        this.sim = sim;
     }
 
     public void selectPlanet(ImageButton planet) {
@@ -43,10 +46,7 @@ public class GameScreenController {
             return;
         }
 
-        Planet from = DataSource.getPlanet(selectedPlanet.getName());
-        Planet to = DataSource.getPlanet(planet.getName());
-
-        NewRouteDialog dialog = new NewRouteDialog(g, from, to);
+        NewRouteDialog dialog = new NewRouteDialog(g, sim, selectedPlanet, planet);
         dialog.show(stage);
 
         deselectButton();

@@ -45,11 +45,9 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         this.model = new GameState();
-        this.controller = new GameScreenController(model, stage);
+        this.controller = new GameScreenController(model, stage, spaceShipSim);
 
         background = new Texture(Gdx.files.internal("sprites/background.jpg"));
-        //image.setPosition(0, 150);
-        //stage.addActor(image);
 
         //create the planets
         createPlanets();
@@ -88,8 +86,9 @@ public class GameScreen implements Screen {
         }
         shapeRenderer.end();
 
+        spaceShipSim.tick();
         batch.begin();
-            spaceShipSim.drawAllShips();
+            spaceShipSim.drawAllShips(batch);
         batch.end();
 
         stage.act();
