@@ -103,6 +103,7 @@ public class NewRouteDialog {
             public void changed(ChangeEvent event, Actor actor) {
                 shipNumSlider.setValue(0);
                 shipNumSlider.setRange(0, g.curPlayer().spaceShips[nameIdMap.get(spaceShipSB.getSelected())]);
+                legalCheck();
             }
         });
 

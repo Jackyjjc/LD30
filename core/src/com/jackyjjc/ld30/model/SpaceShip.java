@@ -9,8 +9,8 @@ public class SpaceShip {
     public String description;
     public String manufacturer;
     public int price;
-    public int armor;
-    public int energy;
+    public int capacity;
+    public int efficiency;
     public int maintenance;
     public int maxDistance;
 }

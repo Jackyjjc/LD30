@@ -24,6 +24,7 @@ public class Player {
         this.routes = new ArrayList<>();
         this.spaceShips = new int[DataSource.get().spaceShips.length];
         this.spaceShips[0] = 20;
-        this.spaceShips[1] = 20;
+        this.spaceShips[5] = 20;
+        this.spaceShips[9] = 20;
     }
 }

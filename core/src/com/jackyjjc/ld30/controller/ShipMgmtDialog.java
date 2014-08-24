@@ -118,7 +118,7 @@ public class ShipMgmtDialog {
         dialog.getButtonTable().add(confirmBtn);
         dialog.button("Cancel");
 
-        dialog.setSize(420, 368);
+        dialog.setSize(440, 368);
         dialog.setModal(true);
         dialog.setMovable(true);
         dialog.setPosition((600 - dialog.getWidth()) / 2, 150 + (400 - dialog.getHeight()) / 2);
@@ -132,9 +132,8 @@ public class ShipMgmtDialog {
         SpaceShip ship = DataSource.get().spaceShips[shipId];
         detail.setText(ship.name
                 + "\n" + ship.description
-                + "\n\nArmor: " + ship.armor
-                + "\nCapacity: " + 200
-                + "\nEfficiency: " + ship.energy
+                + "\n\nCapacity: " + ship.capacity
+                + "\nEfficiency: " + ship.efficiency
                 + "\nPrice: " + ship.price
                 + "\nMax Distance: " + ship.maxDistance
                 + "\nMaintenance Cost: " + ship.maintenance

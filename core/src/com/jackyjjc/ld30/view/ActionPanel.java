@@ -100,6 +100,6 @@ public class ActionPanel implements GameUpdateListener {
 
     @Override
     public void notifyUpdate(GameState g) {
-        moneyLabel.setText("Money: " + g.curPlayer().money);
+        moneyLabel.setText("" + g.curPlayer().money);
     }
 }
