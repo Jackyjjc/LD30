@@ -23,7 +23,7 @@ public class EditRouteDialog {
     private Route curRoute;
 
     private Label errLabel;
-    private SelectBox<String> routeSelBox;
+    private SelectBox<String> spaceShipSB;
     private Slider shipNumSlider;
     private TextButton confirmBtn;
     private TextButton deleteBtn;
@@ -47,12 +47,13 @@ public class EditRouteDialog {
         }
         curRoute = routes.size() > 0 ? routes.get(0) : null;
 
-        routeSelBox = new SelectBox<>(Resources.getSkin());
+        final SelectBox<String> routeSelBox = new SelectBox<>(Resources.getSkin());
         routeSelBox.setItems(routeNames);
         routeSelBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 curRoute = routes.get(routeSelBox.getSelectedIndex());
+                legalCheck();
             }
         });
         t.add(routeSelBox);
@@ -63,11 +64,19 @@ public class EditRouteDialog {
         for(SpaceShip s : DataSource.get().spaceShips) {
             shipNames.add(s.name);
         }
-        final SelectBox<String> spaceShipSB = new SelectBox<>(Resources.getSkin());
+        spaceShipSB = new SelectBox<>(Resources.getSkin());
         spaceShipSB.setItems(shipNames);
 
         shipNumSlider = new Slider(0, 0, 1, false, Resources.getSkin());
         if(routes.size() > 0) {
+            if(g.curPlayer().spaceShips[curRoute.ship.id] + curRoute.numShips < 0) {
+                System.out.println(g.curPlayer().spaceShips[curRoute.ship.id]);
+                System.out.println(curRoute.numShips);
+                System.out.println(g.curPlayer().spaceShips[curRoute.ship.id] + curRoute.numShips);
+                System.out.println(curRoute.ship.id);
+                System.out.println(curRoute.from.name + " " + curRoute.to.name);
+                System.out.println(curRoute.numShips);
+            }
             shipNumSlider.setRange(0, g.curPlayer().spaceShips[curRoute.ship.id] + curRoute.numShips);
         }
 
@@ -99,8 +108,13 @@ public class EditRouteDialog {
                     shipNumSlider.setRange(0, g.curPlayer().spaceShips[curRoute.ship.id] + curRoute.numShips);
                 } else {
                     shipNumSlider.setValue(0);
+                    if(g.curPlayer().spaceShips[spaceShipSB.getSelectedIndex()] < 0) {
+                        System.out.println(spaceShipSB.getSelectedIndex());
+                        System.out.println(g.curPlayer().spaceShips[spaceShipSB.getSelectedIndex()]);
+                    }
                     shipNumSlider.setRange(0, g.curPlayer().spaceShips[spaceShipSB.getSelectedIndex()]);
                 }
+                legalCheck();
             }
         });
 
@@ -157,7 +171,7 @@ public class EditRouteDialog {
         legalCheck();
 
         dialog.setSize(420, 300);
-        dialog.setModal(true);
+        dialog.setModal(false);
         dialog.setMovable(true);
         dialog.setPosition((600 - dialog.getWidth()) / 2, 150 + (400 - dialog.getHeight()) / 2);
     }
@@ -168,7 +182,7 @@ public class EditRouteDialog {
             deleteBtn.setDisabled(true);
             return;
         }
-        if(!g.isLegalEditRoute(curRoute, routeSelBox.getSelectedIndex(), (int) shipNumSlider.getValue())) {
+        if(!g.isLegalEditRoute(curRoute, spaceShipSB.getSelectedIndex(), (int) shipNumSlider.getValue())) {
             errLabel.setVisible(true);
             errLabel.setText(GameStrings.values[g.errno]);
             confirmBtn.setDisabled(true);

@@ -116,7 +116,7 @@ public class GameState {
         }
 
         //check if there are ships;
-        if(numShips <= 0) {
+        if(numShips <= 0 || curPlayer().spaceShips[shipId] < numShips) {
             errno = GameStrings.ERR_NO_SHIP;
             return false;
         }

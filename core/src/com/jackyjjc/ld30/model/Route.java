@@ -8,6 +8,7 @@ public class Route {
     public Planet to;
     public SpaceShip ship;
     public int numShips;
+    public double rand;
 
     public static int getSetupCost(Planet from, Planet to) {
         return from.distance[to.id] * 100;
@@ -18,13 +19,30 @@ public class Route {
         this.to = to;
         this.ship = DataSource.get().spaceShips[shipId];
         this.numShips = numShips;
+        this.rand = RNG.randInt(-5 , 5);
     }
 
     public int getMaintenance() {
         return ship.maintenance * numShips;
     }
 
+    public int getNumPassenger() {
+        int relation = DataSource.getRace(from.race).relation[to.race];
+        System.out.println(rand);
+        double fromPop = from.population * (1.0 + relation / 10.0) * from.business / 100.0 * (1 + rand / 10.0);
+        System.out.println(fromPop);
+        double toPop = to.population * (1.0 + relation / 10.0) * to.business / 100.0 * (1 + rand / 10.0);
+        System.out.println(toPop);
+        return (int) (fromPop + toPop);
+    }
+
     public int genMoney() {
+        int totalShipCap = ship.capacity * numShips;
+        int actualPassengers = Math.min(getNumPassenger(), totalShipCap);
+
+        System.out.print("num passengers: " + actualPassengers);
+
+
         int numPeople = (int) (from.population * (from.business / 100.0) + to.population * (to.business / 100));
 
         int travelDiff = Math.abs(from.travel - to.travel);

@@ -7,7 +7,7 @@ import java.util.List;
  * @author Jackyjjc (jacky.jjchen@gmail.com)
  */
 public class Player {
-    private static final int START_MONEY = 2000;
+    private static final int START_MONEY = 20000;
     private static final int BASE_RESERACH_RATE = 3;
 
     public String name;

@@ -119,7 +119,7 @@ public class ShipMgmtDialog {
         dialog.button("Cancel");
 
         dialog.setSize(440, 368);
-        dialog.setModal(true);
+        dialog.setModal(false);
         dialog.setMovable(true);
         dialog.setPosition((600 - dialog.getWidth()) / 2, 150 + (400 - dialog.getHeight()) / 2);
     }

@@ -155,7 +155,7 @@ public class NewRouteDialog {
                 super.clicked(event, x, y);
                 if(!confirmBtn.isDisabled()) {
                     int size = (int) shipNumSlider.getValue();
-                    Route r = g.addRoute(from, to, spaceShipSB.getSelectedIndex(), size);
+                    Route r = g.addRoute(from, to, nameIdMap.get(spaceShipSB.getSelected()), size);
                     sim.addRoute(r, selectedPlanet, planet, size);
                 }
             }
@@ -166,7 +166,7 @@ public class NewRouteDialog {
         legalCheck();
 
         dialog.setSize(420, 300);
-        dialog.setModal(true);
+        dialog.setModal(false);
         dialog.setMovable(true);
         dialog.setPosition((600 - dialog.getWidth()) / 2, 150 + (400 - dialog.getHeight()) / 2);
     }
