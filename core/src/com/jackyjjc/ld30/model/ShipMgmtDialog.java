@@ -1,7 +1,14 @@
 package com.jackyjjc.ld30.model;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.jackyjjc.ld30.view.Resources;
 
 /**
@@ -11,13 +18,139 @@ public class ShipMgmtDialog {
 
     private Dialog dialog;
 
-    public ShipMgmtDialog() {
+    public ShipMgmtDialog(final GameState g) {
         this.dialog = new Dialog("Manage Ships", Resources.getSkin());
+        Table rootTable = dialog.getContentTable();
 
-        
+        Array<String> modelList = new Array<>();
+        for(SpaceShip s : DataSource.get().spaceShips) {
+            modelList.add(s.name);
+        }
+
+        Label ownLabel = new Label("Your ships: ", Resources.getSkin());
+        rootTable.add(ownLabel).colspan(4).left();
+        rootTable.row();
+
+        final SelectBox<String> modelSelBox = new SelectBox<>(Resources.getSkin());
+        modelSelBox.setItems(modelList);
+        rootTable.add(modelSelBox);
+
+        final TextField text = new TextField("0", Resources.getSkin());
+        text.setDisabled(true);
+        text.setText("" + g.curPlayer().spaceShips[0]);
+        rootTable.add(text);
+
+        TextButton addBtn = new TextButton("+", Resources.getSkin());
+        TextButton subBtn = new TextButton("-", Resources.getSkin());
+
+        rootTable.add(addBtn).width(30);
+        rootTable.add(subBtn).width(30);
+        rootTable.row();
+
+        final Label detailLabel = new Label("", Resources.getSkin());
+        updateDetail(detailLabel, 0);
+        detailLabel.setWrap(true);
+        detailLabel.setAlignment(Align.left | Align.top);
+        ScrollPane sp = new ScrollPane(detailLabel, Resources.getSkin());
+        rootTable.add(sp).colspan(4).width(400).height(180);
+        rootTable.row();
+
+        modelSelBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                text.setText("" + g.curPlayer().spaceShips[modelSelBox.getSelectedIndex()]);
+                updateDetail(detailLabel, modelSelBox.getSelectedIndex());
+            }
+        });
+
+        Label label = new Label("Gain/Lost: ", Resources.getSkin());
+        rootTable.add(label);
+        final Label priceLabel = new Label("0", Resources.getSkin());
+        rootTable.add(priceLabel).colspan(3);
+        rootTable.row();
+
+        addBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                int num = (Integer.parseInt(text.getText()) + 1);
+                text.setText(num + "");
+                updatePrice(g, priceLabel, modelSelBox.getSelectedIndex(), num);
+            }
+        });
+
+        subBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                int num = Integer.parseInt(text.getText());
+                num = Math.max(num - 1, 0);
+                text.setText(num + "");
+                updatePrice(g, priceLabel, modelSelBox.getSelectedIndex(), num);
+            }
+        });
+
+        final Label errLabel = new Label("", Resources.getSkin());
+        errLabel.setColor(Color.RED);
+        errLabel.setVisible(false);
+        rootTable.add(errLabel);
+
+        TextButton confirmBtn = new TextButton("Confirm", Resources.getSkin());
+        confirmBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                int shipId = modelSelBox.getSelectedIndex();
+                int newAmount = Integer.parseInt(text.getText());
+                if(!g.isLegalShipMgmt(shipId, newAmount)) {
+                    errLabel.setText(GameStrings.values[g.errno]);
+                    errLabel.setVisible(true);
+                } else {
+                    errLabel.setVisible(false);
+                    g.setShipAmount(shipId, newAmount);
+                }
+                updatePrice(g, priceLabel, shipId, newAmount);
+            }
+        });
+        dialog.getButtonTable().add(confirmBtn);
+        dialog.button("Cancel");
+
+        dialog.setSize(420, 368);
+        dialog.setModal(true);
+        dialog.setMovable(true);
+        dialog.setPosition((600 - dialog.getWidth()) / 2, 150 + (400 - dialog.getHeight()) / 2);
     }
 
     public void show(Stage s) {
         s.addActor(dialog);
+    }
+
+    private void updateDetail(Label detail, int shipId) {
+        SpaceShip ship = DataSource.get().spaceShips[shipId];
+        detail.setText(ship.name
+                + "\n" + ship.description
+                + "\n\nArmor: " + ship.armor
+                + "\nCapacity: " + 200
+                + "\nEfficiency: " + ship.energy
+                + "\nPrice: " + ship.price
+                + "\nMax Distance: " + ship.maxDistance
+                + "\nMaintenance Cost: " + ship.maintenance
+                + "\nManufacturer: " + ship.manufacturer);
+    }
+
+    public void updatePrice(GameState g, Label priceLabel, int shipId, int newAmount) {
+        int currentAmount = g.curPlayer().spaceShips[shipId];
+        int delta = newAmount - currentAmount;
+        SpaceShip ship = DataSource.get().spaceShips[shipId];
+        int deltaPrice = - (ship.price * delta);
+
+        priceLabel.setText(deltaPrice + "");
+        if(deltaPrice > 0) {
+            priceLabel.setText("+" + priceLabel.getText());
+            priceLabel.setColor(Color.GREEN);
+        } else if (deltaPrice == 0) {
+            priceLabel.setColor(priceLabel.getStyle().fontColor);
+        } else {
+            priceLabel.setColor(Color.RED);
+        }
     }
 }

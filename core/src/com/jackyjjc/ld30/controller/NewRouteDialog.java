@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import com.jackyjjc.ld30.model.*;
 import com.jackyjjc.ld30.view.Resources;
 
+import java.util.HashMap;
+
 /**
  * @author Jackyjjc (jacky.jjchen@gmail.com)
  */
@@ -74,27 +76,22 @@ public class NewRouteDialog {
         t.add(l).colspan(3);
         t.row();
 
+        final HashMap<String, Integer> nameIdMap = new HashMap<>();
         Array<String> shipNames = new Array<>();
-        for(Tuple<SpaceShip, Integer> ship : g.curPlayer().spaceShips) {
-            shipNames.add(ship._1.name);
+        for(SpaceShip ship : DataSource.get().spaceShips) {
+            if (g.curPlayer().spaceShips[ship.id] > 0) {
+                nameIdMap.put(ship.name, ship.id);
+                shipNames.add(ship.name);
+            }
         }
 
-        final MaintainLabel mLabel = new MaintainLabel(g);
+        final Label mLabel = new Label("0", Resources.getSkin());
         final Label numShipLabel = new Label("0", Resources.getSkin());
 
         shipNumSlider = new Slider(0, 0, 1, false, Resources.getSkin());
         if(shipNames.size > 0) {
-            shipNumSlider.setRange(0, g.curPlayer().spaceShips.get(0)._2);
+            shipNumSlider.setRange(0, g.curPlayer().spaceShips[nameIdMap.get(shipNames.first())]);
         }
-
-        shipNumSlider.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                numShipLabel.setText(Integer.toString((int) shipNumSlider.getValue()));
-                mLabel.update();
-                legalCheck();
-            }
-        });
 
         final SelectBox<String> spaceShipSB = new SelectBox<>(Resources.getSkin());
         spaceShipSB.setItems(shipNames);
@@ -102,12 +99,23 @@ public class NewRouteDialog {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 shipNumSlider.setValue(0);
-                shipNumSlider.setRange(0, g.curPlayer().spaceShips.get(spaceShipSB.getSelectedIndex())._2);
+                shipNumSlider.setRange(0, g.curPlayer().spaceShips[nameIdMap.get(spaceShipSB.getSelected())]);
             }
         });
 
-        mLabel.setSlider(shipNumSlider);
-        mLabel.setSelectBox(spaceShipSB);
+
+        shipNumSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                numShipLabel.setText(Integer.toString((int) shipNumSlider.getValue()));
+                SpaceShip s = DataSource.get().spaceShips[nameIdMap.get(spaceShipSB.getSelected())];
+                double num = shipNumSlider.getValue();
+                int cost = (int) (s.maintenance * num);
+
+                mLabel.setText(Integer.toString(cost) + " / turn");
+                legalCheck();
+            }
+        });
 
         l = new Label("Ship: ", Resources.getSkin());
         t.add(l);
@@ -170,32 +178,5 @@ public class NewRouteDialog {
 
     public void show(Stage s) {
         s.addActor(dialog);
-    }
-
-    private static class MaintainLabel extends Label {
-        private GameState g;
-        private SelectBox<String> sb;
-        private Slider slider;
-
-        public MaintainLabel(GameState g) {
-            super("0", Resources.getSkin());
-            this.g = g;
-        }
-
-        public void setSelectBox(SelectBox<String> sb) {
-            this.sb = sb;
-        }
-
-        public void setSlider(Slider slider) {
-            this.slider = slider;
-        }
-
-        public void update() {
-            SpaceShip s = g.curPlayer().spaceShips.get(sb.getSelectedIndex())._1;
-            double num = slider.getValue();
-            int cost = (int) (s.maintenance * num);
-
-            this.setText(Integer.toString(cost) + " / turn");
-        }
     }
 }

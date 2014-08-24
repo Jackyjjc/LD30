@@ -25,14 +25,14 @@ public class Resources {
         return get().skin;
     }
 
-    public static SpriteDrawable getSpriteDrawable(String key) {
-        if (!get().spriteMap.containsKey(key)) {
+    public static <T> T get(String key, Class<T> t) {
+        if (!get().map.containsKey(key)) {
             return null;
         }
-        return get().spriteMap.get(key);
+        return (T)get().map.get(key);
     }
 
-    private HashMap<String, SpriteDrawable> spriteMap;
+    private HashMap<String, Object> map;
     private Skin skin;
 
     public Resources() {
@@ -45,13 +45,15 @@ public class Resources {
     }
 
     private void loadSprites() {
-        this.spriteMap = new HashMap<String, SpriteDrawable>();
+        this.map = new HashMap<String, Object>();
 
         for(int i = 0; i < DataSource.get().planets.length; i++) {
-            this.spriteMap.put("planet" + i, new SpriteDrawable(
+            this.map.put("planet" + i, new SpriteDrawable(
                     new Sprite(new Texture(Gdx.files.internal("sprites/Planet_" + i + ".png")))));
-            this.spriteMap.put("planet" + i + "_checked", new SpriteDrawable(
+            this.map.put("planet" + i + "_checked", new SpriteDrawable(
                     new Sprite(new Texture(Gdx.files.internal("sprites/Planet_" + i + "_c.png")))));
         }
+
+        this.map.put("ship", new Sprite(new Texture("sprites/ship.png")));
     }
 }

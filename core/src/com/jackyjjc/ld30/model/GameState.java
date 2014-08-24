@@ -29,21 +29,45 @@ public class GameState {
         curPlayer().routes.add(newRoute);
         curPlayer().money -= Route.getSetupCost(from, to);
 
-        Tuple<SpaceShip, Integer> target = null;
-        for(Tuple<SpaceShip, Integer> t : curPlayer().spaceShips) {
-            if (t._1.id == shipId) {
-                target = t;
-                break;
-            }
-        }
-
-        assert target != null;
-        target._2 -= numShips;
-        if(target._2 <= 0) {
-            curPlayer().spaceShips.remove(target);
-        }
-
+        curPlayer().spaceShips[shipId] -= numShips;
         notifyListeners();
+    }
+
+    public void setShipAmount(int shipId, int newAmount) {
+        int currentAmount = curPlayer().spaceShips[shipId];
+        int delta = newAmount - currentAmount;
+
+        SpaceShip ship = DataSource.get().spaceShips[shipId];
+        int deltaPrice = ship.price * Math.abs(delta);
+
+        if(delta < 0) {
+            curPlayer().money += deltaPrice;
+        } else {
+            curPlayer().money -= deltaPrice;
+        }
+
+        curPlayer().spaceShips[shipId] = newAmount;
+        notifyListeners();
+    }
+
+    public boolean isLegalShipMgmt(int shipId, int newAmount) {
+        int currentAmount = curPlayer().spaceShips[shipId];
+        int delta = newAmount - currentAmount;
+
+        if(delta < 0) {
+            return true;
+        }
+
+        SpaceShip ship = DataSource.get().spaceShips[shipId];
+        int deltaPrice = ship.price * Math.abs(delta);
+
+        if(curPlayer().money < deltaPrice) {
+            System.out.println(curPlayer().money + " , " + deltaPrice);
+            errno = GameStrings.ERR_INSUF_FUND;
+            return false;
+        }
+
+        return true;
     }
 
     public boolean isLegalRoute(Planet from, Planet to, float numShips) {

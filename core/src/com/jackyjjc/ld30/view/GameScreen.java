@@ -5,11 +5,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.jackyjjc.ld30.controller.GameScreenController;
 import com.jackyjjc.ld30.model.DataSource;
 import com.jackyjjc.ld30.model.GameState;
@@ -23,23 +28,28 @@ public class GameScreen implements Screen {
 
     private Stage stage;
     private ShapeRenderer shapeRenderer;
+    private SpriteBatch batch;
 
     private GameState model;
     private GameScreenController controller;
+    private SpaceShipSim spaceShipSim;
 
+    private Texture background;
     private ImageButton[] planetButtons;
 
     public GameScreen() {
+        this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
+        this.spaceShipSim = new SpaceShipSim();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
         this.model = new GameState();
         this.controller = new GameScreenController(model, stage);
 
-        Image image = new Image(new Texture(Gdx.files.internal("sprites/background.jpg")));
-        image.setPosition(0, 150);
-        stage.addActor(image);
+        background = new Texture(Gdx.files.internal("sprites/background.jpg"));
+        //image.setPosition(0, 150);
+        //stage.addActor(image);
 
         //create the planets
         createPlanets();
@@ -47,6 +57,7 @@ public class GameScreen implements Screen {
         //create planet detail panel
         Label planetDetail = new Label("", Resources.getSkin());
         planetDetail.setWrap(true);
+        planetDetail.setAlignment(Align.left | Align.top);
         ScrollPane sp = new ScrollPane(planetDetail, Resources.getSkin());
         sp.setSize(600, 150);
         sp.setScrollBarPositions(true, true);
@@ -54,7 +65,7 @@ public class GameScreen implements Screen {
         stage.addActor(sp);
         controller.planetDetail = sp;
 
-        ActionPanel rhsPanel = new ActionPanel(model, controller);
+        ActionPanel rhsPanel = new ActionPanel(model, controller, stage);
         stage.addActor(rhsPanel.getRootTable());
     }
 
@@ -63,8 +74,9 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act();
-        stage.draw();
+        batch.begin();
+            batch.draw(background, 0, 150);
+        batch.end();
 
         //draw all the routes
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -75,6 +87,13 @@ public class GameScreen implements Screen {
             shapeRenderer.line(from.getCenterX(), from.getCenterY(), to.getCenterX(), to.getCenterY());
         }
         shapeRenderer.end();
+
+        batch.begin();
+            spaceShipSim.drawAllShips();
+        batch.end();
+
+        stage.act();
+        stage.draw();
     }
 
     @Override
@@ -105,6 +124,8 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        shapeRenderer.dispose();
+        batch.dispose();
     }
 
     private void createPlanets() {
@@ -142,10 +163,10 @@ public class GameScreen implements Screen {
     private ImageButton createPlanetButton(int id, int x, int y, int size) {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         String name = "planet" + id;
-        style.up = Resources.getSpriteDrawable(name);
-        style.down = Resources.getSpriteDrawable(name + "_checked");
-        style.over = Resources.getSpriteDrawable(name + "_checked");
-        style.checked = Resources.getSpriteDrawable(name + "_checked");
+        style.up = Resources.get(name, SpriteDrawable.class);
+        style.down = Resources.get(name + "_checked", SpriteDrawable.class);
+        style.over = Resources.get(name + "_checked", SpriteDrawable.class);
+        style.checked = Resources.get(name + "_checked", SpriteDrawable.class);
 
         final ImageButton planet = new ImageButton(style);
         planet.setName(String.valueOf(id));
