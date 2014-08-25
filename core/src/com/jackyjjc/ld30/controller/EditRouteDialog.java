@@ -160,7 +160,15 @@ public class EditRouteDialog {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                text.setText((Integer.parseInt(text.getText()) + 1) + "");
+                int num;
+                try {
+                    num = Integer.parseInt(text.getText());
+                } catch (NumberFormatException e) {
+                    errLabel.setText("Price is not a number.");
+                    errLabel.setVisible(true);
+                    return;
+                }
+                text.setText((num + 1) + "");
             }
         });
 
@@ -168,7 +176,14 @@ public class EditRouteDialog {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                int num = Integer.parseInt(text.getText());
+                int num;
+                try {
+                    num = Integer.parseInt(text.getText());
+                } catch (NumberFormatException e) {
+                    errLabel.setText("Price is not a number.");
+                    errLabel.setVisible(true);
+                    return;
+                }
                 num = Math.max(0, num - 1);
                 text.setText(num + "");
             }
@@ -213,8 +228,15 @@ public class EditRouteDialog {
                 if(curRoute == null) {
                     return;
                 }
+                int price;
+                try {
+                    price = Integer.parseInt(text.getText());
+                } catch (NumberFormatException e) {
+                    errLabel.setText("Price is not a number.");
+                    errLabel.setVisible(true);
+                    return;
+                }
                 int newAmount = (int) shipNumSlider.getValue();
-                int price = Integer.parseInt(text.getText());
                 g.editRoute(curRoute, spaceShipSB.getSelectedIndex(), newAmount, price);
                 sim.editRoute(curRoute, newAmount);
             }

@@ -141,6 +141,7 @@ public class GameState {
         p.lastEarn = 0;
         p.lastPaid = 0;
 
+        int totalPass = 0;
         for(Route r : p.routes) {
             r.rand = RNG.randInt(-6, 6);
 
@@ -154,7 +155,12 @@ public class GameState {
             p.lastPaid += maintenance;
 
             r.lastProfit = money - maintenance;
+            totalPass += r.lastPass;
         }
+
+//        if(p.routes.size() > 100 && totalPass > ) {
+//
+//        }
 
         notifyListeners();
     }

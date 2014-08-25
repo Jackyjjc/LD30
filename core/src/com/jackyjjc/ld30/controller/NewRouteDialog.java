@@ -145,7 +145,6 @@ public class NewRouteDialog {
         l = new Label("Price: ", Resources.getSkin());
         t.add(l);
         final TextField text = new TextField("0", Resources.getSkin());
-        text.setDisabled(true);
         t.add(text);
         TextButton addBtn = new TextButton("+", Resources.getSkin());
         TextButton subBtn = new TextButton("-", Resources.getSkin());
@@ -154,7 +153,16 @@ public class NewRouteDialog {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                text.setText((Integer.parseInt(text.getText()) + 1) + "");
+                int num;
+                try {
+                    num = Integer.parseInt(text.getText());
+                } catch (NumberFormatException e) {
+                    errLabel.setText("Price is not a number.");
+                    errLabel.setVisible(true);
+                    return;
+                }
+
+                text.setText((num + 1) + "");
             }
         });
 
@@ -162,7 +170,14 @@ public class NewRouteDialog {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                int num = Integer.parseInt(text.getText());
+                int num;
+                try {
+                    num = Integer.parseInt(text.getText());
+                } catch (NumberFormatException e) {
+                    errLabel.setText("Price is not a number.");
+                    errLabel.setVisible(true);
+                    return;
+                }
                 num = Math.max(0, num - 1);
                 text.setText(num + "");
             }
@@ -185,8 +200,15 @@ public class NewRouteDialog {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 if(!confirmBtn.isDisabled()) {
+                    int price;
+                    try {
+                        price = Integer.parseInt(text.getText());
+                    } catch (NumberFormatException e) {
+                        errLabel.setText("Price is not a number.");
+                        errLabel.setVisible(true);
+                        return;
+                    }
                     int size = (int) shipNumSlider.getValue();
-                    int price = Integer.parseInt(text.getText());
                     Route r = g.addRoute(from, to, nameIdMap.get(spaceShipSB.getSelected()), size, price);
                     sim.addRoute(r, selectedPlanet, planet, size);
                 }
