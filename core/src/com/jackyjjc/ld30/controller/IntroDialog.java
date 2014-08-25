@@ -51,6 +51,10 @@ public class IntroDialog {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                if(selectBox.getSelected() == null) {
+                    return;
+                }
+
                 int nextIndex = selectBox.getSelectedIndex() + 1;
                 if(nextIndex > 5) {
                     return;

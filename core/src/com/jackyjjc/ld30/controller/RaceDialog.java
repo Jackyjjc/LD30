@@ -46,6 +46,9 @@ public class RaceDialog {
         raceSelBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                if(raceSelBox.getSelected() == null) {
+                    return;
+                }
                 showRace(textLabel, raceSelBox.getSelectedIndex());
             }
         });

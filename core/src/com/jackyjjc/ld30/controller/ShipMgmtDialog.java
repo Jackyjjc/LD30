@@ -45,7 +45,6 @@ public class ShipMgmtDialog {
         rootTable.add(modelSelBox);
 
         final TextField text = new TextField("0", Resources.getSkin());
-        text.setDisabled(true);
         text.setText("" + g.curPlayer().spaceShips[0]);
         rootTable.add(text);
 
@@ -67,6 +66,9 @@ public class ShipMgmtDialog {
         modelSelBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                if(modelSelBox.getSelected() == null) {
+                    return;
+                }
                 text.setText("" + g.curPlayer().spaceShips[modelSelBox.getSelectedIndex()]);
                 updateDetail(detailLabel, modelSelBox.getSelectedIndex());
             }
@@ -78,11 +80,27 @@ public class ShipMgmtDialog {
         rootTable.add(priceLabel).colspan(3);
         rootTable.row();
 
+        final Label errLabel = new Label("", Resources.getSkin());
+        errLabel.setColor(Color.RED);
+        errLabel.setVisible(false);
+        rootTable.add(errLabel);
+
         addBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                int num = (Integer.parseInt(text.getText()) + 1);
+                if(modelSelBox.getSelected() == null) {
+                    return;
+                }
+                int num;
+                try {
+                    num = Integer.parseInt(text.getText());
+                } catch (NumberFormatException e) {
+                    errLabel.setText("Amount is not a number.");
+                    errLabel.setVisible(true);
+                    return;
+                }
+                num = num + 1;
                 text.setText(num + "");
                 updatePrice(g, priceLabel, modelSelBox.getSelectedIndex(), num);
             }
@@ -92,24 +110,39 @@ public class ShipMgmtDialog {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                int num = Integer.parseInt(text.getText());
+                if(modelSelBox.getSelected() == null) {
+                    return;
+                }
+                int num;
+                try {
+                    num = Integer.parseInt(text.getText());
+                } catch (NumberFormatException e) {
+                    errLabel.setText("Amount is not a number.");
+                    errLabel.setVisible(true);
+                    return;
+                }
                 num = Math.max(num - 1, 0);
                 text.setText(num + "");
                 updatePrice(g, priceLabel, modelSelBox.getSelectedIndex(), num);
             }
         });
 
-        final Label errLabel = new Label("", Resources.getSkin());
-        errLabel.setColor(Color.RED);
-        errLabel.setVisible(false);
-        rootTable.add(errLabel);
-
         TextButton confirmBtn = new TextButton("Confirm", Resources.getSkin());
         confirmBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if(modelSelBox.getSelected() == null) {
+                    return;
+                }
                 int shipId = modelSelBox.getSelectedIndex();
-                int newAmount = Integer.parseInt(text.getText());
+                int newAmount;
+                try {
+                    newAmount = Integer.parseInt(text.getText());
+                } catch (NumberFormatException e) {
+                    errLabel.setText("Amount is not a number.");
+                    errLabel.setVisible(true);
+                    return;
+                }
                 if(!g.isLegalShipMgmt(shipId, newAmount)) {
                     errLabel.setText(GameStrings.values[g.errno]);
                     errLabel.setVisible(true);

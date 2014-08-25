@@ -51,7 +51,7 @@ public class EditRouteDialog {
         final Label lastProfitNum = new Label("0", Resources.getSkin());
 
         final List<Route> routes = g.curPlayer().routes;
-        Array<String> routeNames = new Array<>();
+        final Array<String> routeNames = new Array<>();
         for(Route r : routes) {
             routeNames.add(r.from.name + "  <==>  " + r.to.name);
         }
@@ -71,15 +71,7 @@ public class EditRouteDialog {
         spaceShipSB.setItems(shipNames);
 
         shipNumSlider = new Slider(0, 0, 1, false, Resources.getSkin());
-        if(routes.size() > 0) {
-            if(g.curPlayer().spaceShips[curRoute.ship.id] + curRoute.numShips < 0) {
-                System.out.println(g.curPlayer().spaceShips[curRoute.ship.id]);
-                System.out.println(curRoute.numShips);
-                System.out.println(g.curPlayer().spaceShips[curRoute.ship.id] + curRoute.numShips);
-                System.out.println(curRoute.ship.id);
-                System.out.println(curRoute.from.name + " " + curRoute.to.name);
-                System.out.println(curRoute.numShips);
-            }
+        if(curRoute != null) {
             shipNumSlider.setRange(0, g.curPlayer().spaceShips[curRoute.ship.id] + curRoute.numShips);
         }
 
@@ -98,6 +90,10 @@ public class EditRouteDialog {
             public void changed(ChangeEvent event, Actor actor) {
                 numShipLabel.setText(String.valueOf((int)shipNumSlider.getValue()));
 
+                if(spaceShipSB.getSelected() == null) {
+                    return;
+                }
+
                 SpaceShip s = DataSource.get().spaceShips[spaceShipSB.getSelectedIndex()];
                 double num = shipNumSlider.getValue();
                 int cost = (int) (s.maintenance * num);
@@ -110,15 +106,15 @@ public class EditRouteDialog {
         spaceShipSB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                if(spaceShipSB.getSelected() == null || curRoute == null) {
+                    return;
+                }
+
                 if (curRoute.ship.id == spaceShipSB.getSelectedIndex()) {
                     shipNumSlider.setValue(curRoute.numShips);
                     shipNumSlider.setRange(0, g.curPlayer().spaceShips[curRoute.ship.id] + curRoute.numShips);
                 } else {
                     shipNumSlider.setValue(0);
-                    if(g.curPlayer().spaceShips[spaceShipSB.getSelectedIndex()] < 0) {
-                        System.out.println(spaceShipSB.getSelectedIndex());
-                        System.out.println(g.curPlayer().spaceShips[spaceShipSB.getSelectedIndex()]);
-                    }
                     shipNumSlider.setRange(0, g.curPlayer().spaceShips[spaceShipSB.getSelectedIndex()]);
                 }
                 legalCheck();
@@ -128,6 +124,10 @@ public class EditRouteDialog {
         routeSelBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                if(routeSelBox.getSelected() == null) {
+                    return;
+                }
+
                 curRoute = routes.get(routeSelBox.getSelectedIndex());
                 spaceShipSB.setSelectedIndex(curRoute.ship.id);
                 shipNumSlider.setValue(curRoute.numShips);
@@ -263,7 +263,7 @@ public class EditRouteDialog {
     }
 
     private void legalCheck() {
-        if(curRoute == null) {
+        if(curRoute == null || spaceShipSB.getSelected() == null) {
             confirmBtn.setDisabled(true);
             deleteBtn.setDisabled(true);
             return;

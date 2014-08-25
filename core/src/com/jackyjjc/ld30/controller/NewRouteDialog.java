@@ -92,7 +92,7 @@ public class NewRouteDialog {
         final Label numShipLabel = new Label("0", Resources.getSkin());
 
         shipNumSlider = new Slider(0, 0, 1, false, Resources.getSkin());
-        if(shipNames.size > 0) {
+        if(shipNames.size > 0 && nameIdMap.containsKey(shipNames.first())) {
             shipNumSlider.setRange(0, g.curPlayer().spaceShips[nameIdMap.get(shipNames.first())]);
         }
 
@@ -101,6 +101,9 @@ public class NewRouteDialog {
         spaceShipSB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                if(spaceShipSB.getSelected() == null || !nameIdMap.containsKey(spaceShipSB.getSelected())) {
+                    return;
+                }
                 shipNumSlider.setValue(0);
                 shipNumSlider.setRange(0, g.curPlayer().spaceShips[nameIdMap.get(spaceShipSB.getSelected())]);
                 legalCheck();
@@ -112,6 +115,9 @@ public class NewRouteDialog {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 numShipLabel.setText(Integer.toString((int) shipNumSlider.getValue()));
+                if(spaceShipSB.getSelected() == null || !nameIdMap.containsKey(spaceShipSB.getSelected())) {
+                    return;
+                }
                 SpaceShip s = DataSource.get().spaceShips[nameIdMap.get(spaceShipSB.getSelected())];
                 double num = shipNumSlider.getValue();
                 int cost = (int) (s.maintenance * num);
@@ -209,6 +215,9 @@ public class NewRouteDialog {
                         errLabel.setVisible(true);
                         return;
                     }
+                    if(spaceShipSB.getSelected() == null || !nameIdMap.containsKey(spaceShipSB.getSelected())) {
+                        return;
+                    }
                     int size = (int) shipNumSlider.getValue();
                     Route r = g.addRoute(from, to, nameIdMap.get(spaceShipSB.getSelected()), size, price);
                     sim.addRoute(r, selectedPlanet, planet, size);
@@ -227,6 +236,9 @@ public class NewRouteDialog {
     }
 
     private void legalCheck() {
+        if(spaceShipSB.getSelected() == null || !nameIdMap.containsKey(spaceShipSB.getSelected())) {
+            return;
+        }
         if(!g.isLegalAddRoute(from, to, nameIdMap.get(spaceShipSB.getSelected()), shipNumSlider.getValue())) {
             errLabel.setVisible(true);
             errLabel.setText(GameStrings.values[g.errno]);
