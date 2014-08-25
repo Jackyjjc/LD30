@@ -142,6 +142,37 @@ public class NewRouteDialog {
         t.add(mLabel).colspan(3);
         t.row();
 
+        l = new Label("Price: ", Resources.getSkin());
+        t.add(l);
+        final TextField text = new TextField("0", Resources.getSkin());
+        text.setDisabled(true);
+        t.add(text);
+        TextButton addBtn = new TextButton("+", Resources.getSkin());
+        TextButton subBtn = new TextButton("-", Resources.getSkin());
+
+        addBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                text.setText((Integer.parseInt(text.getText()) + 1) + "");
+            }
+        });
+
+        subBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                int num = Integer.parseInt(text.getText());
+                num = Math.max(0, num - 1);
+                text.setText(num + "");
+            }
+        });
+
+        t.add(addBtn).width(30);
+        t.add(subBtn).width(30);
+        t.row();
+
+
         errLabel = new Label("", Resources.getSkin());
         errLabel.setColor(Color.RED);
         errLabel.setVisible(false);
@@ -155,7 +186,8 @@ public class NewRouteDialog {
                 super.clicked(event, x, y);
                 if(!confirmBtn.isDisabled()) {
                     int size = (int) shipNumSlider.getValue();
-                    Route r = g.addRoute(from, to, nameIdMap.get(spaceShipSB.getSelected()), size);
+                    int price = Integer.parseInt(text.getText());
+                    Route r = g.addRoute(from, to, nameIdMap.get(spaceShipSB.getSelected()), size, price);
                     sim.addRoute(r, selectedPlanet, planet, size);
                 }
             }
@@ -165,7 +197,7 @@ public class NewRouteDialog {
 
         legalCheck();
 
-        dialog.setSize(420, 300);
+        dialog.setSize(420, 360);
         dialog.setModal(false);
         dialog.setMovable(true);
         dialog.setPosition((600 - dialog.getWidth()) / 2, 150 + (400 - dialog.getHeight()) / 2);

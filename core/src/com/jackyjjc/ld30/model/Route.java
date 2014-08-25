@@ -8,18 +8,21 @@ public class Route {
     public Planet to;
     public SpaceShip ship;
     public int numShips;
+    public int price;
     public double rand;
+    public int lastPass;
+    public int lastProfit;
 
     public static int getSetupCost(Planet from, Planet to) {
         return from.distance[to.id] * 100;
     }
 
-    public Route(Planet from, Planet to, int shipId, int numShips) {
+    public Route(Planet from, Planet to, int shipId, int numShips, int price) {
         this.from = from;
         this.to = to;
         this.ship = DataSource.get().spaceShips[shipId];
         this.numShips = numShips;
-        this.rand = RNG.randInt(-5 , 5);
+        this.price = price;
     }
 
     public int getMaintenance() {
@@ -37,19 +40,27 @@ public class Route {
     }
 
     public int genMoney() {
-        int totalShipCap = ship.capacity * numShips;
-        int actualPassengers = Math.min(getNumPassenger(), totalShipCap);
-
-        System.out.print("num passengers: " + actualPassengers);
-
-
-        int numPeople = (int) (from.population * (from.business / 100.0) + to.population * (to.business / 100));
+        int actualPassengers = getNumPassenger();
+        //System.out.println("raw " + actualPassengers);
+        actualPassengers = (int) (actualPassengers * (ship.comfortability / 100.0));
+        //System.out.println("after comfort " + actualPassengers);
 
         int travelDiff = Math.abs(from.travel - to.travel);
         int strategicDiff = Math.abs(from.strategic - to.strategic);
         int businessDiff = Math.abs(from.business - to.business);
-
         int maxDiff = Math.max(travelDiff, Math.max(strategicDiff, businessDiff));
-        return numPeople * maxDiff;
+
+        double priceEffect = 1 + ((maxDiff - price) / 100.0);
+        actualPassengers = (int) (actualPassengers * priceEffect);
+        //System.out.println("after price " + actualPassengers);
+
+        int totalShipCap = ship.capacity * numShips;
+        actualPassengers = Math.min(actualPassengers, totalShipCap);
+
+        this.lastPass = actualPassengers;
+
+        //System.out.println("actual passengers: " + actualPassengers);
+
+        return actualPassengers * price;
     }
 }

@@ -2,6 +2,7 @@ package com.jackyjjc.ld30.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.jackyjjc.ld30.controller.GameScreenController;
+import com.jackyjjc.ld30.controller.ReportDialog;
 import com.jackyjjc.ld30.model.DataSource;
 import com.jackyjjc.ld30.model.GameState;
 import com.jackyjjc.ld30.model.Route;
@@ -26,6 +28,7 @@ import com.jackyjjc.ld30.model.Route;
  */
 public class GameScreen implements Screen {
 
+    private Music music;
     private Stage stage;
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
@@ -44,7 +47,9 @@ public class GameScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-
+        this.music = Gdx.audio.newMusic(Gdx.files.internal("music/music.ogg"));
+        this.music.setLooping(true);
+        this.music.setVolume(0.1f);
         this.background = new Texture(Gdx.files.internal("sprites/background.jpg"));
         this.actionPanel = Resources.get("actionPanel", Texture.class);
 
@@ -53,6 +58,9 @@ public class GameScreen implements Screen {
         this.model = new GameState();
         this.spaceShipSim = new SpaceShipSim(planetButtons);
         this.controller = new GameScreenController(model, stage, spaceShipSim);
+
+        ReportDialog reportDialog = new ReportDialog(stage);
+        this.model.addListener(reportDialog);
 
         //create planet detail panel
         Label planetDetail = new Label("", Resources.getSkin());
@@ -65,7 +73,7 @@ public class GameScreen implements Screen {
         stage.addActor(sp);
         controller.planetDetail = sp;
 
-        ActionPanel rhsPanel = new ActionPanel(model, controller, spaceShipSim, stage);
+        ActionPanel rhsPanel = new ActionPanel(model, controller, spaceShipSim, stage, music);
         stage.addActor(rhsPanel.getRootTable());
     }
 

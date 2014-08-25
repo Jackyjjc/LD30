@@ -7,7 +7,7 @@ import java.util.List;
  * @author Jackyjjc (jacky.jjchen@gmail.com)
  */
 public class Player {
-    private static final int START_MONEY = 20000;
+    private static final int START_MONEY = 3000;
     private static final int BASE_RESERACH_RATE = 3;
 
     public String name;
@@ -16,6 +16,9 @@ public class Player {
     public List<Route> routes;
     public int[] spaceShips;
 
+    public int lastEarn;
+    public int lastPaid;
+
     public Player(String name) {
         this.name = name;
         this.money = START_MONEY;
@@ -23,8 +26,7 @@ public class Player {
 
         this.routes = new ArrayList<>();
         this.spaceShips = new int[DataSource.get().spaceShips.length];
-        this.spaceShips[0] = 20;
-        this.spaceShips[5] = 20;
-        this.spaceShips[9] = 20;
+        this.spaceShips[0] = 2;
+        this.spaceShips[1] = 1;
     }
 }

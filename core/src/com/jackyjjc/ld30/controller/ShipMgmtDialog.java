@@ -133,9 +133,9 @@ public class ShipMgmtDialog {
         detail.setText(ship.name
                 + "\n" + ship.description
                 + "\n\nCapacity: " + ship.capacity
-                + "\nEfficiency: " + ship.efficiency
+                + "\nComfortability: " + ship.comfortability
                 + "\nPrice: " + ship.price
-                + "\nMax Distance: " + ship.maxDistance
+                + "\nRange: " + ship.range
                 + "\nMaintenance Cost: " + ship.maintenance
                 + "\nManufacturer: " + ship.manufacturer);
     }

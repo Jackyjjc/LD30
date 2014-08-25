@@ -10,7 +10,7 @@ public class SpaceShip {
     public String manufacturer;
     public int price;
     public int capacity;
-    public int efficiency;
+    public int comfortability;
     public int maintenance;
-    public int maxDistance;
+    public int range;
 }

@@ -1,16 +1,20 @@
 package com.jackyjjc.ld30.view;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jackyjjc.ld30.controller.EditRouteDialog;
 import com.jackyjjc.ld30.controller.GameScreenController;
+import com.jackyjjc.ld30.controller.ShipMgmtDialog;
 import com.jackyjjc.ld30.model.GameState;
 import com.jackyjjc.ld30.model.GameUpdateListener;
-import com.jackyjjc.ld30.controller.ShipMgmtDialog;
 
 /**
  * @author Jackyjjc (jacky.jjchen@gmail.com)
@@ -20,7 +24,7 @@ public class ActionPanel implements GameUpdateListener {
     private Table table;
     private Label moneyLabel;
 
-    public ActionPanel(final GameState model, final GameScreenController controller, final SpaceShipSim sim, final Stage stage) {
+    public ActionPanel(final GameState model, final GameScreenController controller, final SpaceShipSim sim, final Stage stage, final Music music) {
         //creating rhs panel
         table = new Table();
         table.top();
@@ -90,6 +94,40 @@ public class ActionPanel implements GameUpdateListener {
             }
         });
         table.add(endTurnBtn).colspan(2).center().padTop(15).width(100);
+        table.row();
+
+        final TextButton musicBtn = new TextButton("Music: Off", Resources.getSkin());
+        style = new TextButton.TextButtonStyle(buildRouteBtn.getStyle());
+        style.checked = style.down;
+        musicBtn.setStyle(style);
+        musicBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                if(!music.isPlaying()) {
+                    music.play();
+                    musicBtn.setText("Music: On");
+                } else {
+                    music.pause();
+                    musicBtn.setText("Music: Off");
+                }
+            }
+        });
+        table.add(musicBtn).padTop(50).colspan(2).center();
+        table.row();
+
+        l = new Label("Volume: ", Resources.getSkin());
+        table.add(l).width(40).padTop(15);
+        final Slider slider = new Slider(0, 0.8f, 0.01f, false, Resources.getSkin());
+        slider.setValue(music.getVolume());
+        slider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                music.setVolume(slider.getValue());
+            }
+        });
+        table.add(slider).width(100).padTop(15);
+        table.row();
 
         model.addListener(this);
     }

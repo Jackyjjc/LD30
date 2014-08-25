@@ -20,12 +20,11 @@ public class GameState {
         this.turnNum = 0;
         this.players = new Player[]{
             new Player("human player"),
-            new Player("computer 1"),
         };
     }
 
-    public Route addRoute(Planet from, Planet to, int shipId, int numShips) {
-        Route newRoute = new Route(from, to, shipId, numShips);
+    public Route addRoute(Planet from, Planet to, int shipId, int numShips, int price) {
+        Route newRoute = new Route(from, to, shipId, numShips, price);
         curPlayer().routes.add(newRoute);
         curPlayer().money -= Route.getSetupCost(from, to);
 
@@ -39,11 +38,12 @@ public class GameState {
         curPlayer().routes.remove(r);
     }
 
-    public void editRoute(Route r, int shipId, int newAmount) {
+    public void editRoute(Route r, int shipId, int newAmount, int price) {
         curPlayer().spaceShips[r.ship.id] += r.numShips;
 
         r.ship = DataSource.get().spaceShips[shipId];
         r.numShips = newAmount;
+        r.price = price;
 
         curPlayer().spaceShips[shipId] -= newAmount;
     }
@@ -86,7 +86,7 @@ public class GameState {
     }
 
     public boolean isLegalEditRoute(Route r, int shipId, int numShips) {
-        if(DataSource.get().spaceShips[shipId].maxDistance < r.from.distance[r.to.id]) {
+        if(DataSource.get().spaceShips[shipId].range < r.from.distance[r.to.id]) {
             errno = GameStrings.ERR_SHIP_NOT_SUIT;
             return false;
         }
@@ -110,7 +110,7 @@ public class GameState {
             }
         }
 
-        if(DataSource.get().spaceShips[shipId].maxDistance < from.distance[to.id]) {
+        if(DataSource.get().spaceShips[shipId].range < from.distance[to.id]) {
             errno = GameStrings.ERR_SHIP_NOT_SUIT;
             return false;
         }
@@ -137,12 +137,23 @@ public class GameState {
         }
 
         //process all the routes
-        for(Player p : players) {
-            for(Route r : p.routes) {
-                //get profit and pay maintenance
-                p.money += r.genMoney();
-                p.money -= r.getMaintenance();
-            }
+        Player p = players[0];
+        p.lastEarn = 0;
+        p.lastPaid = 0;
+
+        for(Route r : p.routes) {
+            r.rand = RNG.randInt(-6, 6);
+
+            //get profit and pay maintenance
+            int money = r.genMoney();
+            int maintenance = r.getMaintenance();
+
+            p.money += money;
+            p.money -= maintenance;
+            p.lastEarn += money;
+            p.lastPaid += maintenance;
+
+            r.lastProfit = money - maintenance;
         }
 
         notifyListeners();
