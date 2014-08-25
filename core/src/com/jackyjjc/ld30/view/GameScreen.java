@@ -44,7 +44,6 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         this.music = Resources.get("music", Music.class);
-        System.out.println(this.music);
         this.music.setLooping(true);
         this.music.setVolume(0.1f);
         this.background = Resources.get("background", Texture.class);
@@ -63,13 +62,12 @@ public class GameScreen implements Screen {
         this.model.addWinListener(winDialog);
 
         //create planet detail panel
-        Label planetDetail = new Label("", Resources.getSkin());
+        Label planetDetail = new Label("Select a planet to see the detail.", Resources.getSkin());
         planetDetail.setWrap(true);
         planetDetail.setAlignment(Align.left | Align.top);
         ScrollPane sp = new ScrollPane(planetDetail, Resources.getSkin());
         sp.setSize(600, 150);
         sp.setScrollBarPositions(true, true);
-        sp.setVisible(false);
         stage.addActor(sp);
         controller.planetDetail = sp;
 
@@ -86,8 +84,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-            batch.draw(background, 0, 150);
-            batch.draw(actionPanel, 600, 0);
+        batch.draw(background, 0, 150);
+        batch.draw(actionPanel, 600, 0);
         batch.end();
 
         //draw all the routes

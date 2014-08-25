@@ -133,7 +133,8 @@ public class ActionPanel implements GameUpdateListener {
         table.add(helpBtn).colspan(2).center().padTop(40).width(100);
         table.row();
 
-        final TextButton musicBtn = new TextButton("Music: Off", Resources.getSkin());
+        final TextButton musicBtn = new TextButton("Music: On", Resources.getSkin());
+        musicBtn.setChecked(true);
         style = new TextButton.TextButtonStyle(buildRouteBtn.getStyle());
         style.checked = style.down;
         musicBtn.setStyle(style);

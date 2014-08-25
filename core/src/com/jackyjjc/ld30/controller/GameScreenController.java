@@ -51,7 +51,7 @@ public class GameScreenController {
 
         deselectButton();
         planet.setChecked(false);
-        planetDetail.setVisible(false);
+        ((Label)planetDetail.getWidget()).setText("Select a planet to see the detail.");
         exitBuildMode();
     }
 
@@ -62,7 +62,7 @@ public class GameScreenController {
 
         if (planet == null || selectedPlanet == planet) {
             deselectButton();
-            planetDetail.setVisible(false);
+            ((Label)planetDetail.getWidget()).setText("Select a planet to see the detail.");
         } else {
             selectedPlanet = planet;
             planetDetail.setVisible(true);

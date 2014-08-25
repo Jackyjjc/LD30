@@ -46,7 +46,7 @@ public class LoadScreen implements Screen {
         float percentage = Resources.load() * 100;
 
         if(percentage >= 100) {
-            g.setScreen(new GameScreen());
+            g.setScreen(new TitleScreen(g));
         }
 
         this.loadingStr = LOADING_TEXT;

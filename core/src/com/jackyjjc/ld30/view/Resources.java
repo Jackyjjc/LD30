@@ -38,7 +38,7 @@ public class Resources {
 
     public Resources() {
         i = 0;
-        total = DataSource.get().planets.length + 5;
+        total = DataSource.get().planets.length + 6;
         this.map = new HashMap<>();
     }
 
@@ -77,6 +77,9 @@ public class Resources {
                 break;
             case 4:
                 this.map.put("music", Gdx.audio.newMusic(Gdx.files.internal("music/music.ogg")));
+                break;
+            case 5:
+                this.map.put("title", new Texture(Gdx.files.internal("sprites/title.jpg")));
                 break;
         }
         i++;
