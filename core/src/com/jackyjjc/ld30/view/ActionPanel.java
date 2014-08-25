@@ -10,10 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.jackyjjc.ld30.controller.EditRouteDialog;
-import com.jackyjjc.ld30.controller.GameScreenController;
-import com.jackyjjc.ld30.controller.RaceDialog;
-import com.jackyjjc.ld30.controller.ShipMgmtDialog;
+import com.jackyjjc.ld30.controller.*;
 import com.jackyjjc.ld30.model.GameState;
 import com.jackyjjc.ld30.model.GameUpdateListener;
 
@@ -123,6 +120,18 @@ public class ActionPanel implements GameUpdateListener {
         table.add(endTurnBtn).colspan(2).center().padTop(15).width(100);
         table.row();
 
+        TextButton helpBtn = new TextButton("Help", Resources.getSkin());
+        helpBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                IntroDialog dialog = new IntroDialog();
+                dialog.show(stage);
+            }
+        });
+        table.add(helpBtn).colspan(2).center().padTop(40).width(100);
+        table.row();
+
         final TextButton musicBtn = new TextButton("Music: Off", Resources.getSkin());
         style = new TextButton.TextButtonStyle(buildRouteBtn.getStyle());
         style.checked = style.down;
@@ -140,7 +149,7 @@ public class ActionPanel implements GameUpdateListener {
                 }
             }
         });
-        table.add(musicBtn).padTop(50).colspan(2).center();
+        table.add(musicBtn).padTop(15).colspan(2).center().width(100);
         table.row();
 
         l = new Label("Volume: ", Resources.getSkin());
