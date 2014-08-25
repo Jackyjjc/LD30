@@ -159,6 +159,18 @@ public class GameState {
             p.totalPass += r.lastPass;
         }
 
+        if(p.totalPass > p.maxPass) {
+            p.maxPass = p.totalPass;
+        }
+
+        if((p.lastEarn - p.lastPaid) > p.maxProfit) {
+            p.maxProfit = (p.lastEarn - p.lastPaid);
+        }
+
+        if(p.routes.size() > p.maxRoute) {
+            p.maxRoute = p.routes.size();
+        }
+
         //System.out.println("total pass " + totalPass + " profit " + (p.lastEarn - p.lastPaid));
         if(p.routes.size() >= 10 && p.totalPass >= 3000 && p.money >= 100000) {
             winListener.notifyWin(this);

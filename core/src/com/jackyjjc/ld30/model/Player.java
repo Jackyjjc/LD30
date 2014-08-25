@@ -20,6 +20,10 @@ public class Player {
     public int lastPaid;
     public int totalPass;
 
+    public int maxPass;
+    public int maxProfit;
+    public int maxRoute;
+
     public Player(String name) {
         this.name = name;
         this.money = START_MONEY;
