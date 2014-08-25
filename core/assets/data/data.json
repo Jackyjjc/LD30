@@ -93,9 +93,9 @@
    }, {
       "id": 6,
       "name": "Antaeus",
-      "description": "This planet acts as a major trading hub since it is located at the center of the galaxy. An Earth-like planet with an unusually large axial tilt causing extreme seasonal changes. Indigenous lifeforms include flying squid-like creatures and bovids. The Altaxian government has established a major trading post here.",
-      "race": 4,
-      "population": 60,
+      "description": "This planet acts as a major trading hub since it is located at the center of the galaxy. A neutral trading post has established here.",
+      "race": 5,
+      "population": 30,
       "travel": 23,
       "strategic": 40,
       "business": 90,
@@ -137,16 +137,16 @@
       "race": 2,
       "population": 50,
       "travel": 35,
-      "strategic": 67,
-      "business": 86,
+      "strategic": 80,
+      "business": 64,
       "distance": [23, 42, 27, 7, 37, 45, 13, 31, 33, 19, 0, 11, 7, 8, 28, 14, 19, 23, 34, 19]
    }, {
       "id": 11,
       "name": "Laskaris VI",
-      "description": "Homeworld of the Scientians. It is famous for its glass volcanoes and its dense forests of electroluminescent trees. Maybe it is not a great idea to travel to here.",
+      "description": "Homeworld of the Scientians. It is famous for its glass volcanoes and its dense forests of electroluminescent trees.",
       "race": 5,
       "population": 75,
-      "travel": 5,
+      "travel": 60,
       "strategic": 65,
       "business": 20,
       "distance": [33, 53, 35, 8, 49, 57, 25, 42, 45, 31, 11, 0, 17, 14, 33, 24, 26, 35, 43, 22]
