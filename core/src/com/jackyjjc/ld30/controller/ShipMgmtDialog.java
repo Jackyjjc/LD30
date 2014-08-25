@@ -21,8 +21,13 @@ import com.jackyjjc.ld30.view.Resources;
 public class ShipMgmtDialog {
 
     private Dialog dialog;
+    private GameState g;
 
     public ShipMgmtDialog(final GameState g) {
+        this.g = g;
+    }
+
+    private Dialog makeDialog() {
         this.dialog = new Dialog("Manage Ships", Resources.getSkin());
         Table rootTable = dialog.getContentTable();
 
@@ -122,10 +127,12 @@ public class ShipMgmtDialog {
         dialog.setModal(false);
         dialog.setMovable(true);
         dialog.setPosition((600 - dialog.getWidth()) / 2, 150 + (400 - dialog.getHeight()) / 2);
+
+        return dialog;
     }
 
     public void show(Stage s) {
-        s.addActor(dialog);
+        s.addActor(makeDialog());
     }
 
     private void updateDetail(Label detail, int shipId) {

@@ -73,7 +73,7 @@ public class GameScreenController {
             String race = p.race == -1 ? "none" : DataSource.getRace(p.race).name;
 
             l.setText(p.name
-                    + "\nfraction: " + race + "   population: " + p.population
+                    + "\nrace: " + race + "   population: " + p.population
                     + "\ntravel: " + p.travel + "   strategic: " + p.strategic + "   business: " + p.business
                     + "\n\n" + p.description);
         }
@@ -89,9 +89,5 @@ public class GameScreenController {
     private void exitBuildMode() {
         buildRouteBtn.setChecked(false);
         inBuildMode = false;
-    }
-
-    public void build(Planet from, Planet to) {
-        //Route route = new Route(selected, to);
     }
 }

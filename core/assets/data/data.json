@@ -27,7 +27,7 @@
    }, {
       "id": 5,
       "name": "Neutral",
-      "description": "Neutral.",
+      "description": "The minor races in this galaxy.",
       "relation": [0, 0, 0, 0, 0, 0]
    }],
    "planets":[{

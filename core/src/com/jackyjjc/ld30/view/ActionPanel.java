@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jackyjjc.ld30.controller.EditRouteDialog;
 import com.jackyjjc.ld30.controller.GameScreenController;
+import com.jackyjjc.ld30.controller.RaceDialog;
 import com.jackyjjc.ld30.controller.ShipMgmtDialog;
 import com.jackyjjc.ld30.model.GameState;
 import com.jackyjjc.ld30.model.GameUpdateListener;
@@ -97,6 +98,18 @@ public class ActionPanel implements GameUpdateListener {
             }
         });
         table.add(shipBtn).colspan(2).center().padTop(15).width(100);
+        table.row();
+
+        TextButton raceBtn = new TextButton("Races", Resources.getSkin());
+        raceBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                RaceDialog dialog = new RaceDialog(model);
+                dialog.show(stage);
+            }
+        });
+        table.add(raceBtn).colspan(2).center().padTop(15).width(100);
         table.row();
 
         TextButton endTurnBtn = new TextButton("End Turn", Resources.getSkin());
