@@ -14,10 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.jackyjjc.ld30.controller.GameScreenController;
-import com.jackyjjc.ld30.controller.IntroDialog;
-import com.jackyjjc.ld30.controller.ReportDialog;
-import com.jackyjjc.ld30.controller.WinDialog;
+import com.jackyjjc.ld30.controller.*;
 import com.jackyjjc.ld30.model.DataSource;
 import com.jackyjjc.ld30.model.GameState;
 import com.jackyjjc.ld30.model.Route;
@@ -79,8 +76,8 @@ public class GameScreen implements Screen {
         ActionPanel rhsPanel = new ActionPanel(model, controller, spaceShipSim, stage, music);
         stage.addActor(rhsPanel.getRootTable());
 
-        IntroDialog dialog = new IntroDialog();
-        dialog.show(stage);
+        NameDialog nameDialog = new NameDialog(model);
+        nameDialog.show(stage);
     }
 
     @Override

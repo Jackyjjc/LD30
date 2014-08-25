@@ -24,6 +24,11 @@ public class GameState {
         };
     }
 
+    public void setPlayerName(String name) {
+        curPlayer().name = name;
+        notifyListeners();
+    }
+
     public Route addRoute(Planet from, Planet to, int shipId, int numShips, int price) {
         Route newRoute = new Route(from, to, shipId, numShips, price);
         curPlayer().routes.add(newRoute);

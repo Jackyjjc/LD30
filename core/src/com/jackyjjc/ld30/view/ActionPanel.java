@@ -23,6 +23,7 @@ public class ActionPanel implements GameUpdateListener {
     private Label moneyLabel;
     private Label numRouteLabel;
     private Label numPassLabel;
+    private Label nameLabel;
 
     public ActionPanel(final GameState model, final GameScreenController controller, final SpaceShipSim sim, final Stage stage, final Music music) {
         //creating rhs panel
@@ -32,11 +33,11 @@ public class ActionPanel implements GameUpdateListener {
         table.setPosition(600, 0);
         //table.setDebug(true);
 
-        Label l = new Label(model.curPlayer().name, Resources.getSkin());
-        table.add(l).top().left().width(200).height(50).colspan(2).padLeft(15);
+        nameLabel = new Label(model.curPlayer().name, Resources.getSkin());
+        table.add(nameLabel).top().left().width(200).height(50).colspan(2).padLeft(15);
         table.row();
 
-        l = new Label("Money: ", Resources.getSkin());
+        Label l = new Label("Money: ", Resources.getSkin());
         table.add(l).padLeft(5);
         moneyLabel = new Label(model.curPlayer().money + "", Resources.getSkin());
         table.add(moneyLabel);
@@ -177,5 +178,6 @@ public class ActionPanel implements GameUpdateListener {
         moneyLabel.setText("" + g.curPlayer().money);
         numRouteLabel.setText("" + g.curPlayer().routes.size());
         numPassLabel.setText("" + g.curPlayer().totalPass);
+        nameLabel.setText("" + g.curPlayer().name);
     }
 }
