@@ -121,22 +121,6 @@ public class EditRouteDialog {
             }
         });
 
-        routeSelBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if(routeSelBox.getSelected() == null) {
-                    return;
-                }
-
-                curRoute = routes.get(routeSelBox.getSelectedIndex());
-                spaceShipSB.setSelectedIndex(curRoute.ship.id);
-                shipNumSlider.setValue(curRoute.numShips);
-                lastPassNum.setText(curRoute.lastPass + "");
-                lastProfitNum.setText(curRoute.lastProfit + "");
-                legalCheck();
-            }
-        });
-
         l = new Label("Ship: ", Resources.getSkin());
         t.add(l).colspan(4).left();
         t.row();
@@ -160,6 +144,24 @@ public class EditRouteDialog {
         t.add(text).width(50);
         TextButton addBtn = new TextButton("+", Resources.getSkin());
         TextButton subBtn = new TextButton("-", Resources.getSkin());
+
+        routeSelBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(routeSelBox.getSelected() == null) {
+                    return;
+                }
+
+                curRoute = routes.get(routeSelBox.getSelectedIndex());
+                spaceShipSB.setSelectedIndex(curRoute.ship.id);
+                shipNumSlider.setValue(curRoute.numShips);
+                shipNumSlider.setRange(0, g.curPlayer().spaceShips[curRoute.ship.id] + curRoute.numShips);
+                text.setText(curRoute.price + "");
+                lastPassNum.setText(curRoute.lastPass + "");
+                lastProfitNum.setText(curRoute.lastProfit + "");
+                legalCheck();
+            }
+        });
 
         addBtn.addListener(new ClickListener() {
             @Override
@@ -253,7 +255,7 @@ public class EditRouteDialog {
 
         legalCheck();
 
-        dialog.setSize(420, 370);
+        dialog.setSize(450, 370);
         dialog.setModal(true);
         dialog.setKeepWithinStage(false);
         dialog.setMovable(true);
@@ -279,6 +281,6 @@ public class EditRouteDialog {
     }
 
     public void show(Stage s) {
-        s.addActor(makeDialog());
+        makeDialog().show(s);
     }
 }
