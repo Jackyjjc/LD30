@@ -179,7 +179,7 @@ public class GameState {
         }
 
         //System.out.println("total pass " + totalPass + " profit " + (p.lastEarn - p.lastPaid));
-        if(p.routes.size() >= 10 && p.totalPass >= 3000 && p.money >= 100000) {
+        if(p.routes.size() >= 10 && p.totalPass >= 1500 && p.money >= 100000) {
             winListener.notifyWin(this);
         }
 

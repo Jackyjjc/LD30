@@ -87,7 +87,7 @@ public class IntroDialog {
             case 1:
                 text = "You need to achieve these goals to win:" +
                         "\n\n\t - own 10 or more routes." +
-                        "\n\n\t - carry 3000 or more passengers in one turn." +
+                        "\n\n\t - carry 2000 or more passengers in one turn." +
                         "\n\n\t - own 100000 or more money.";
                 break;
             case 2:

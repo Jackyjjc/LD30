@@ -85,7 +85,7 @@
       "name": "Charlton",
       "description": "Homeworld of the Qhoathians. The other fractions would love to come here just to ruin the land of the Qhoathians.",
       "race": 0,
-      "population": 140,
+      "population": 120,
       "travel": 30,
       "strategic": 90,
       "business": 20,
@@ -95,7 +95,7 @@
       "name": "Antaeus",
       "description": "This planet acts as a major trading hub since it is located at the center of the galaxy. An Earth-like planet with an unusually large axial tilt causing extreme seasonal changes. Indigenous lifeforms include flying squid-like creatures and bovids. The Altaxian government has established a major trading post here.",
       "race": 4,
-      "population": 110,
+      "population": 60,
       "travel": 23,
       "strategic": 40,
       "business": 90,
@@ -175,7 +175,7 @@
       "name": "Narnia",
       "description": "A small planet which is famous for its wardrobes and talking lions.",
       "race": 1,
-      "population": 50,
+      "population": 15,
       "travel": 80,
       "strategic": 40,
       "business": 79,
@@ -225,10 +225,10 @@
       "name": "Lokono",
       "description": "Market place for the Muonians.",
       "race": 1,
-      "population": 15,
+      "population": 35,
       "travel": 58,
       "strategic": 44,
-      "business": 92,
+      "business": 88,
       "distance": [37, 51, 16, 25, 42, 50, 22, 29, 44, 21, 19, 22, 25, 10, 10, 31, 8, 30, 50, 0]
    }],
    "spaceShips": [{
@@ -250,7 +250,7 @@
       "capacity": 50,
       "comfortability": 76,
       "maintenance": 900,
-      "range": 18,
+      "range": 15,
    }, {
       "id": 2,
       "name": "FTL Starseeker",
@@ -260,7 +260,7 @@
       "capacity": 70,
       "comfortability": 72,
       "maintenance": 1800,
-      "range": 28,
+      "range": 21,
    }, {
       "id": 3,
       "name": "UNS Banana",
@@ -280,7 +280,7 @@
       "capacity": 55,
       "comfortability": 70,
       "maintenance": 1050,
-      "range": 20,
+      "range": 16,
    }, {
       "id": 5,
       "name": "UNS Thames",
@@ -290,7 +290,7 @@
       "capacity": 80,
       "comfortability": 65,
       "maintenance": 1650,
-      "range": 26,
+      "range": 22,
    }, {
       "id": 6,
       "name": "UNS Hermes Starseeker",
@@ -300,7 +300,7 @@
       "capacity": 100,
       "comfortability": 80,
       "maintenance": 2200,
-      "range": 45,
+      "range": 27,
    }, {
       "id": 7,
       "name": "SS Hermes0",
@@ -320,7 +320,7 @@
       "capacity": 130,
       "comfortability": 83,
       "maintenance": 4000,
-      "range": 49,
+      "range": 37,
    }, {
       "id": 9,
       "name": "SS Hermes2",

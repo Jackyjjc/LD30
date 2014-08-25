@@ -41,7 +41,11 @@ public class Circle {
 
         for(int i = 0; i < 20; i++) {
             for(int j = 0; j < 20; j++) {
-                adjMatrix[i][j] = (int) (edist(planets[i][0], planets[i][1], planets[j][0], planets[j][1]) / 10.0);
+                double ed = edist(planets[i][0], planets[i][1], planets[j][0], planets[j][1]);
+                double r = (planets[i][2] + planets[j][2]) / 2.0;
+                double result = ed == 0 ? ed : ed - r;
+
+                adjMatrix[i][j] = (int) (result / 10.0);
             }
             System.out.print("\"distance\": [");
             for(int j = 0; j < 20; j++) {
