@@ -12,6 +12,8 @@ public class Route {
     public double rand;
     public int lastPass;
     public int lastProfit;
+    public int createdTime;
+    public int currentTurn;
 
     public static int getSetupCost(Planet from, Planet to) {
         return from.distance[to.id] * 100;
@@ -22,16 +24,17 @@ public class Route {
         return Math.max(maxDiff - 20, 5);
     }
 
-    public Route(Planet from, Planet to, int shipId, int numShips, int price) {
+    public Route(Planet from, Planet to, int shipId, int numShips, int price, int createdTime) {
         this.from = from;
         this.to = to;
         this.ship = DataSource.get().spaceShips[shipId];
         this.numShips = numShips;
         this.price = price;
+        this.createdTime = createdTime;
     }
 
     public int getMaintenance() {
-        return ship.maintenance * numShips;
+        return (int) (ship.maintenance * numShips * (1 + (currentTurn - createdTime) / 100.0));
     }
 
     public int getNumPassenger() {
@@ -49,6 +52,9 @@ public class Route {
         //System.out.println("raw " + actualPassengers);
         actualPassengers = (int) (actualPassengers * (ship.comfortability / 100.0));
         //System.out.println("after comfort " + actualPassengers);
+
+        //time effet
+        actualPassengers = (int) (actualPassengers * (0.5 + (createdTime + 5.0) / (currentTurn)));
 
         int maxDiff = getMaxDiff(from, to);
         double priceEffect = 1 + ((maxDiff - price) / 100.0);

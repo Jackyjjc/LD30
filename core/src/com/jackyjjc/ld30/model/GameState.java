@@ -30,7 +30,7 @@ public class GameState {
     }
 
     public Route addRoute(Planet from, Planet to, int shipId, int numShips, int price) {
-        Route newRoute = new Route(from, to, shipId, numShips, price);
+        Route newRoute = new Route(from, to, shipId, numShips, price, turnNum);
         curPlayer().routes.add(newRoute);
         curPlayer().money -= Route.getSetupCost(from, to);
 
@@ -162,6 +162,8 @@ public class GameState {
 
             r.lastProfit = money - maintenance;
             p.totalPass += r.lastPass;
+
+            r.currentTurn = turnNum;
         }
 
         if(p.totalPass > p.maxPass) {
