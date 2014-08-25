@@ -31,6 +31,7 @@ public class Route {
         this.numShips = numShips;
         this.price = price;
         this.createdTime = createdTime;
+        this.currentTurn = createdTime;
     }
 
     public int getMaintenance() {
@@ -39,11 +40,11 @@ public class Route {
 
     public int getNumPassenger() {
         int relation = DataSource.getRace(from.race).relation[to.race];
-        System.out.println(rand);
+        //System.out.println(rand);
         double fromPop = from.population * (1.0 + relation / 10.0) * from.business / 100.0 * (1 + rand / 10.0);
-        System.out.println(fromPop);
+        //System.out.println(fromPop);
         double toPop = to.population * (1.0 + relation / 10.0) * to.business / 100.0 * (1 + rand / 10.0);
-        System.out.println(toPop);
+        //System.out.println(toPop);
         return (int) (fromPop + toPop);
     }
 
@@ -53,8 +54,12 @@ public class Route {
         actualPassengers = (int) (actualPassengers * (ship.comfortability / 100.0));
         //System.out.println("after comfort " + actualPassengers);
 
+        //System.out.println("before " + actualPassengers);
         //time effet
-        actualPassengers = (int) (actualPassengers * (0.5 + (createdTime + 5.0) / (currentTurn)));
+        double effect = (0.5 + (createdTime + 5.0) / (currentTurn == 0 ? 1 : currentTurn));
+        actualPassengers = (int) (actualPassengers * effect);
+
+        //System.out.println("current turn " + effect);
 
         int maxDiff = getMaxDiff(from, to);
         double priceEffect = 1 + ((maxDiff - price) / 100.0);
@@ -66,7 +71,7 @@ public class Route {
 
         this.lastPass = actualPassengers;
 
-        //System.out.println("actual passengers: " + actualPassengers);
+        //System.out.println("p " + actualPassengers + " price " + price + " " + actualPassengers * price);
 
         return actualPassengers * price;
     }
