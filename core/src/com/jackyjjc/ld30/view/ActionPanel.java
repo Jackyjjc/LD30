@@ -23,6 +23,8 @@ public class ActionPanel implements GameUpdateListener {
 
     private Table table;
     private Label moneyLabel;
+    private Label numRouteLabel;
+    private Label numPassLabel;
 
     public ActionPanel(final GameState model, final GameScreenController controller, final SpaceShipSim sim, final Stage stage, final Music music) {
         //creating rhs panel
@@ -37,9 +39,21 @@ public class ActionPanel implements GameUpdateListener {
         table.row();
 
         l = new Label("Money: ", Resources.getSkin());
-        table.add(l);
+        table.add(l).padLeft(5);
         moneyLabel = new Label(model.curPlayer().money + "", Resources.getSkin());
         table.add(moneyLabel);
+        table.row();
+
+        l = new Label("Routes: ", Resources.getSkin());
+        table.add(l).padLeft(5);
+        numRouteLabel = new Label(model.curPlayer().routes.size() + "", Resources.getSkin());
+        table.add(numRouteLabel);
+        table.row();
+
+        l = new Label("Passengers: ", Resources.getSkin());
+        table.add(l).padLeft(5);
+        numPassLabel = new Label(model.curPlayer().totalPass + "", Resources.getSkin());
+        table.add(numPassLabel);
         table.row();
 
         l = new Label("Actions: ", Resources.getSkin());
@@ -117,7 +131,7 @@ public class ActionPanel implements GameUpdateListener {
         table.row();
 
         l = new Label("Volume: ", Resources.getSkin());
-        table.add(l).width(40).padTop(15);
+        table.add(l).width(20).padTop(15).left().padLeft(15);
         final Slider slider = new Slider(0, 0.8f, 0.01f, false, Resources.getSkin());
         slider.setValue(music.getVolume());
         slider.addListener(new ChangeListener() {
@@ -126,7 +140,7 @@ public class ActionPanel implements GameUpdateListener {
                 music.setVolume(slider.getValue());
             }
         });
-        table.add(slider).width(100).padTop(15);
+        table.add(slider).width(100).left().padLeft(-20).padTop(15);
         table.row();
 
         model.addListener(this);
@@ -139,5 +153,7 @@ public class ActionPanel implements GameUpdateListener {
     @Override
     public void notifyUpdate(GameState g) {
         moneyLabel.setText("" + g.curPlayer().money);
+        numRouteLabel.setText("" + g.curPlayer().routes.size());
+        numPassLabel.setText("" + g.curPlayer().totalPass);
     }
 }

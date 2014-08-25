@@ -140,8 +140,8 @@ public class GameState {
         Player p = players[0];
         p.lastEarn = 0;
         p.lastPaid = 0;
+        p.totalPass = 0;
 
-        int totalPass = 0;
         for(Route r : p.routes) {
             r.rand = RNG.randInt(-6, 6);
 
@@ -155,12 +155,13 @@ public class GameState {
             p.lastPaid += maintenance;
 
             r.lastProfit = money - maintenance;
-            totalPass += r.lastPass;
+            p.totalPass += r.lastPass;
         }
 
-//        if(p.routes.size() > 100 && totalPass > ) {
-//
-//        }
+        //System.out.println("total pass " + totalPass + " profit " + (p.lastEarn - p.lastPaid));
+        if(p.routes.size() > 100 && p.totalPass > 50000 && p.money > 0) {
+            System.out.println("win");
+        }
 
         notifyListeners();
     }

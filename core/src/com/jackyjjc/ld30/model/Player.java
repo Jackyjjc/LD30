@@ -18,6 +18,7 @@ public class Player {
 
     public int lastEarn;
     public int lastPaid;
+    public int totalPass;
 
     public Player(String name) {
         this.name = name;
