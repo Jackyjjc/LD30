@@ -145,6 +145,7 @@ public class NewRouteDialog {
         l = new Label("Price: ", Resources.getSkin());
         t.add(l);
         final TextField text = new TextField("0", Resources.getSkin());
+        text.setText(Route.estimatePrice(from, to) + "");
         t.add(text);
         TextButton addBtn = new TextButton("+", Resources.getSkin());
         TextButton subBtn = new TextButton("-", Resources.getSkin());

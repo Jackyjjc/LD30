@@ -46,10 +46,11 @@ public class GameScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        this.music = Gdx.audio.newMusic(Gdx.files.internal("music/music.ogg"));
+        this.music = Resources.get("music", Music.class);
+        System.out.println(this.music);
         this.music.setLooping(true);
         this.music.setVolume(0.1f);
-        this.background = new Texture(Gdx.files.internal("sprites/background.jpg"));
+        this.background = Resources.get("background", Texture.class);
         this.actionPanel = Resources.get("actionPanel", Texture.class);
 
         //create the planets

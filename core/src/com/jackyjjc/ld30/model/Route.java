@@ -17,6 +17,11 @@ public class Route {
         return from.distance[to.id] * 100;
     }
 
+    public static int estimatePrice(Planet from, Planet to) {
+        int maxDiff = getMaxDiff(from, to);
+        return Math.max(maxDiff - 20, 5);
+    }
+
     public Route(Planet from, Planet to, int shipId, int numShips, int price) {
         this.from = from;
         this.to = to;
@@ -45,11 +50,7 @@ public class Route {
         actualPassengers = (int) (actualPassengers * (ship.comfortability / 100.0));
         //System.out.println("after comfort " + actualPassengers);
 
-        int travelDiff = Math.abs(from.travel - to.travel);
-        int strategicDiff = Math.abs(from.strategic - to.strategic);
-        int businessDiff = Math.abs(from.business - to.business);
-        int maxDiff = Math.max(travelDiff, Math.max(strategicDiff, businessDiff));
-
+        int maxDiff = getMaxDiff(from, to);
         double priceEffect = 1 + ((maxDiff - price) / 100.0);
         actualPassengers = (int) (actualPassengers * priceEffect);
         //System.out.println("after price " + actualPassengers);
@@ -62,5 +63,13 @@ public class Route {
         //System.out.println("actual passengers: " + actualPassengers);
 
         return actualPassengers * price;
+    }
+
+    private static int getMaxDiff(Planet from, Planet to) {
+        int travelDiff = Math.abs(from.travel - to.travel);
+        int strategicDiff = Math.abs(from.strategic - to.strategic);
+        int businessDiff = Math.abs(from.business - to.business);
+        int maxDiff = Math.max(travelDiff, Math.max(strategicDiff, businessDiff));
+        return maxDiff;
     }
 }

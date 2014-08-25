@@ -20,6 +20,7 @@ import java.util.List;
 public class EditRouteDialog {
 
     private final GameState g;
+    private SpaceShipSim sim;
     private Route curRoute;
 
     private Label errLabel;
@@ -28,11 +29,13 @@ public class EditRouteDialog {
     private TextButton confirmBtn;
     private TextButton deleteBtn;
 
-    private Dialog dialog;
-
     public EditRouteDialog(final GameState g, final SpaceShipSim sim) {
         this.g = g;
-        this.dialog = new Dialog("Edit Route", Resources.getSkin());
+        this.sim = sim;
+    }
+
+    private Dialog makeDialog() {
+        Dialog dialog = new Dialog("Edit Route", Resources.getSkin());
 
         Table t = dialog.getContentTable();
         //t.debugAll();
@@ -82,7 +85,9 @@ public class EditRouteDialog {
 
         final Label numShipLabel = new Label("0", Resources.getSkin());
         final Label mLabel = new Label("0", Resources.getSkin());
-        if(routes.size() > 0) {
+        if(curRoute != null) {
+            spaceShipSB.setSelectedIndex(curRoute.ship.id);
+            numShipLabel.setText(curRoute.numShips + "");
             mLabel.setText(curRoute.getMaintenance() + "");
             lastPassNum.setText(curRoute.lastPass + "");
             lastProfitNum.setText(curRoute.lastProfit + "");
@@ -253,6 +258,8 @@ public class EditRouteDialog {
         dialog.setKeepWithinStage(false);
         dialog.setMovable(true);
         dialog.setPosition((600 - dialog.getWidth()) / 2, 150 + (400 - dialog.getHeight()) / 2);
+
+        return dialog;
     }
 
     private void legalCheck() {
@@ -272,6 +279,6 @@ public class EditRouteDialog {
     }
 
     public void show(Stage s) {
-        s.addActor(dialog);
+        s.addActor(makeDialog());
     }
 }

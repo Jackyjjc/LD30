@@ -62,6 +62,7 @@ public class ReportDialog implements GameUpdateListener {
 
         earnLabel.setText(g.curPlayer().lastEarn + "");
         lostLabel.setText(g.curPlayer().lastPaid + "");
+        lastTurn = g.turnNum;
 
         dialog.show(stage);
     }

@@ -30,37 +30,56 @@ public class Resources {
             return null;
         }
 
-        Object o = get().map.get(key);
-        if(!o.getClass().equals(t)) {
-            return null;
-        }
-
-        return (T)o;
+        return (T)get().map.get(key);
     }
 
     private HashMap<String, Object> map;
     private Skin skin;
 
     public Resources() {
-        loadSkin();
-        loadSprites();
+        i = 0;
+        total = DataSource.get().planets.length + 5;
+        this.map = new HashMap<>();
     }
 
-    private void loadSkin() {
-        this.skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+    public static float load() {
+        return get().loadNext();
     }
 
-    private void loadSprites() {
-        this.map = new HashMap<String, Object>();
+    private float total;
+    private int i;
+    private float loadNext() {
+        int numPlanets = DataSource.get().planets.length;
 
-        for(int i = 0; i < DataSource.get().planets.length; i++) {
+        if(i < numPlanets) {
             this.map.put("planet" + i, new SpriteDrawable(
                     new Sprite(new Texture(Gdx.files.internal("sprites/Planet_" + i + ".png")))));
             this.map.put("planet" + i + "_checked", new SpriteDrawable(
                     new Sprite(new Texture(Gdx.files.internal("sprites/Planet_" + i + "_c.png")))));
+            i++;
+            return (i / total);
         }
 
-        this.map.put("ship", new Texture("sprites/ship.png"));
-        this.map.put("actionPanel", new Texture("sprites/actionPanel.png"));
+
+        int off = i - numPlanets;
+        switch (off) {
+            case 0:
+                this.map.put("ship", new Texture("sprites/ship.png"));
+                break;
+            case 1:
+                this.map.put("actionPanel", new Texture("sprites/actionPanel.png"));
+                break;
+            case 2:
+                this.skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+                break;
+            case 3:
+                this.map.put("background", new Texture(Gdx.files.internal("sprites/background.jpg")));
+                break;
+            case 4:
+                this.map.put("music", Gdx.audio.newMusic(Gdx.files.internal("music/music.ogg")));
+                break;
+        }
+        i++;
+        return (i / total);
     }
 }
