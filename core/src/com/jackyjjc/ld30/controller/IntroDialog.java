@@ -82,19 +82,19 @@ public class IntroDialog {
             case 0:
                 text = "Not only humans like to travel to other planets" +
                         ", other races in the galaxies like travelling too!" +
-                        "\n\nTherefore, You job is to run a space shuttle company and connect the galaxy!";
+                        "\n\nTherefore, Your job is to run a space shuttle company and connect the galaxy!";
                 break;
             case 1:
                 text = "You need to achieve these goals to win:" +
-                        "\n\n\t - more than 10 routes." +
-                        "\n\n\t - more than 3000 passengers in total." +
-                        "\n\n\t - more than 100000 money.";
+                        "\n\n\t - own 10 or more routes." +
+                        "\n\n\t - carry 3000 or more passengers in one turn." +
+                        "\n\n\t - own 100000 or more money.";
                 break;
             case 2:
                 text = "You can set up as many routes as possible, but: " +
                         "\n\n\t - You can only build 1 route between 2 planets." +
                         "\n\n\t - Routes have an initial setup cost " +
-                              "which is proportional to the distance between the two planets." +
+                              "which increases as the distance increase" +
                         "\n\n\t - Each route need to have at least one spaceship operating on it." +
                         "\n\n\t - You can edit or delete your routes in the 'Edit Routes' menu.";
                 break;
@@ -115,9 +115,9 @@ public class IntroDialog {
                         "\n\n\t - Capacity. It affects the amount of passengers." +
                         "\n\n\t - How comfortable the seats are. No one want to sit on a rock for a few hours." +
                         "\n\n\t - Maintenance. It determines how much it would cost you each turn." +
-                        "\n\n\t - Range. Determine if you can use it to travel a certain distance." +
-                        "\n\nHowever, the most important thing is to choose the manufacturer. Remember, UNS makes the best spaceship in the galaxy(TM)" +
-                        "\n\n'Above information is sponsored by UNS Spaceship Ltd.'";
+                        "\n\n\t - Range. Determine if you can use it to connect two planets." +
+                        "\n\n\"However, the most important thing is to choose the manufacturer\" - says the sale representative from UNS Ltd. \"Remember, UNS makes the best spaceship in the galaxy(TM)\"" +
+                        "\n\n'Above information is provided by UNS Spaceship Ltd.'";
                 break;
             case 6:
                 text = "Have fun!";
