@@ -26,7 +26,6 @@ import com.jackyjjc.ld30.model.Route;
  * @author Jackyjjc (jacky.jjchen@gmail.com)
  */
 public class GameScreen implements Screen {
-
     private Music music;
     private Stage stage;
     private ShapeRenderer shapeRenderer;
@@ -121,6 +120,12 @@ public class GameScreen implements Screen {
 
         stage.act();
         stage.draw();
+
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
