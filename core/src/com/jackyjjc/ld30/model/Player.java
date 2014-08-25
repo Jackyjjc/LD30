@@ -18,7 +18,7 @@ public class Player {
 
     public int lastEarn;
     public int lastPaid;
-    public int totalPass;
+    public int totalPass = 4000;
 
     public Player(String name) {
         this.name = name;
@@ -26,6 +26,7 @@ public class Player {
         this.researchRate = BASE_RESERACH_RATE;
 
         this.routes = new ArrayList<>();
+
         this.spaceShips = new int[DataSource.get().spaceShips.length];
         this.spaceShips[0] = 50;
         this.spaceShips[1] = 50;

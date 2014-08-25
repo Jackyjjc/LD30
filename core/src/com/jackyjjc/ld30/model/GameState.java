@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class GameState {
     private List<GameUpdateListener> listeners;
+    private WinListener winListener;
 
     public int errno;
     public int turnNum;
@@ -159,8 +160,8 @@ public class GameState {
         }
 
         //System.out.println("total pass " + totalPass + " profit " + (p.lastEarn - p.lastPaid));
-        if(p.routes.size() > 100 && p.totalPass > 50000 && p.money > 0) {
-            System.out.println("win");
+        if(p.routes.size() >= 10 && p.totalPass >= 3000 && p.money >= 100000) {
+            winListener.notifyWin(this);
         }
 
         notifyListeners();
@@ -185,5 +186,9 @@ public class GameState {
         for(GameUpdateListener l : listeners) {
             l.notifyUpdate(this);
         }
+    }
+
+    public void addWinListener(WinListener listener) {
+        this.winListener = listener;
     }
 }

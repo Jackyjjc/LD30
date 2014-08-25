@@ -10,14 +10,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.jackyjjc.ld30.controller.GameScreenController;
 import com.jackyjjc.ld30.controller.ReportDialog;
+import com.jackyjjc.ld30.controller.WinDialog;
 import com.jackyjjc.ld30.model.DataSource;
 import com.jackyjjc.ld30.model.GameState;
 import com.jackyjjc.ld30.model.Route;
@@ -62,6 +61,9 @@ public class GameScreen implements Screen {
         ReportDialog reportDialog = new ReportDialog(stage);
         this.model.addListener(reportDialog);
 
+        WinDialog winDialog = new WinDialog(stage);
+        this.model.addWinListener(winDialog);
+
         //create planet detail panel
         Label planetDetail = new Label("", Resources.getSkin());
         planetDetail.setWrap(true);
@@ -75,6 +77,20 @@ public class GameScreen implements Screen {
 
         ActionPanel rhsPanel = new ActionPanel(model, controller, spaceShipSim, stage, music);
         stage.addActor(rhsPanel.getRootTable());
+
+
+        Dialog dialog = new Dialog("Goal", Resources.getSkin());
+        Table t = dialog.getContentTable();
+        Label l = new Label("Connect the galaxy and earn money!" +
+                "\nYou need:\n\t - more than 10 routes" +
+                "\n\t - more than 3000 passengers in total" +
+                "\n\t - more than 100000 money", Resources.getSkin());
+        t.add(l).pad(10);
+        t.row();
+        dialog.button("OK");
+        dialog.setModal(true);
+        dialog.setModal(true);
+        dialog.show(stage);
     }
 
     @Override
